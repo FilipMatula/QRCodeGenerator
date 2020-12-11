@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
+
+    <!--Main menu-->
+    <sys:String x:Key="ScanQR">Scan QR</sys:String>
+    <sys:String x:Key="GenerateQR">Generate QR</sys:String>
+    <sys:String x:Key="Settings">Settings</sys:String>
+
+    <!--Scan card-->
+    <sys:String x:Key="Camera">Camera:</sys:String>
+    <sys:String x:Key="LastScannedText">Last scanned text:</sys:String>
+    <sys:String x:Key="OpenURL">Open URL</sys:String>
+
+    <!--Generate card-->
+    <sys:String x:Key="Text">Text:</sys:String>
+    <sys:String x:Key="Generate">Generate</sys:String>
+    <sys:String x:Key="Save">Save</sys:String>
+
+    <!--Settings card-->
+    <sys:String x:Key="Browser">Browser:</sys:String>
+    
+    <!--Popups-->
+    <sys:String x:Key="NoQRScannedTitle">No QR text scanned</sys:String>
+    <sys:String x:Key="NoQRScannedMessage">There is no scanned QR Code text. Please scan it first and try again.</sys:String>
+    <sys:String x:Key="IncorrectURITitle">Incorrect URI format</sys:String>
+    <sys:String x:Key="IncorrectURIMessage">Scanned QR Code text is not URI valid format.</sys:String>
+    <sys:String x:Key="QRCodeScannedTitle">QRCode scanned</sys:String>
+    <sys:String x:Key="QRCodeScannedMessage">Scanned QRCode text: </sys:String>
+    <sys:String x:Key="QRCodeScannedMessage2">Do you want to open it in browser?</sys:String>
+    <sys:String x:Key="EmptyTextTitle">No text to generate QR Code</sys:String>
+    <sys:String x:Key="EmptyTextMessage">There is no text from which generate QR Code. Please type something and try again.</sys:String>
+    <sys:String x:Key="NoQRGeneratedTitle">No QR code generated</sys:String>
+    <sys:String x:Key="NoQRGeneratedMessage">There is no QR code generated. Please generate it first.</sys:String>
+    <sys:String x:Key="NoDeviceTitle">No device available</sys:String>
+    <sys:String x:Key="NoDeviceMessage">There is no video device available. Please plug video device.</sys:String>
+    <sys:String x:Key="DeviceChangedTitle">Video device changed</sys:String>
+    <sys:String x:Key="DeviceChangedMessage">Video device connected or disconnected. Program will refresh available devices.</sys:String>
+
+</ResourceDictionary>
