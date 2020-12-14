@@ -5,14 +5,14 @@
     <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
 
     <!--Main menu-->
-    <sys:String x:Key="ScanQR">QR scannen</sys:String>
-    <sys:String x:Key="GenerateQR">QR generieren</sys:String>
+    <sys:String x:Key="ScanQR">Scan QR</sys:String>
+    <sys:String x:Key="GenerateQR">QR-Code generieren</sys:String>
     <sys:String x:Key="Settings">Einstellungen</sys:String>
 
     <!--Scan card-->
     <sys:String x:Key="Camera">Kamera:</sys:String>
-    <sys:String x:Key="LastScannedText">Letzter gescannter Text:</sys:String>
-    <sys:String x:Key="OpenURL">Öffne URL</sys:String>
+    <sys:String x:Key="LastScannedText">Zuletzt gescannter Text:</sys:String>
+    <sys:String x:Key="OpenURL">URL öffnen</sys:String>
 
     <!--Generate card-->
     <sys:String x:Key="Text">Text:</sys:String>
@@ -20,23 +20,23 @@
     <sys:String x:Key="Save">Speichern</sys:String>
 
     <!--Settings card-->
-    <sys:String x:Key="Browser">Browser:</sys:String>
+    <sys:String x:Key="Browser">Internet-Browser:</sys:String>
 
     <!--Popups-->
-    <sys:String x:Key="NoQRScannedTitle">Kein QR-Code-Text gescannt</sys:String>
-    <sys:String x:Key="NoQRScannedMessage">Es gibt keinen gescannten QR-Code-Text. Bitte scannen Sie es zuerst und versuchen Sie es erneut.</sys:String>
-    <sys:String x:Key="IncorrectURITitle">Falsches URI-Format</sys:String>
-    <sys:String x:Key="IncorrectURIMessage">Der gescannte QR-Code-Text hat kein URI-gültiges Format.</sys:String>
-    <sys:String x:Key="QRCodeScannedTitle">QRCode gescannt</sys:String>
-    <sys:String x:Key="QRCodeScannedMessage">Gescannter QRCode-Text:</sys:String>
+    <sys:String x:Key="NoQRScannedTitle">Kein QR-Text eingescannt</sys:String>
+    <sys:String x:Key="NoQRScannedMessage">Es ist kein gescannter QR-Code-Text vorhanden. Bitte scannen Sie ihn zuerst und versuchen Sie es erneut.</sys:String>
+    <sys:String x:Key="IncorrectURITitle">Fehlerhaftes URI-Format</sys:String>
+    <sys:String x:Key="IncorrectURIMessage">Der gescannte QR-Code-Text ist nicht das richtige URI-Format.</sys:String>
+    <sys:String x:Key="QRCodeScannedTitle">QRCode eingescannt</sys:String>
+    <sys:String x:Key="QRCodeScannedMessage">Eingescannter QRCode-Text:</sys:String>
     <sys:String x:Key="QRCodeScannedMessage2">Möchten Sie es im Browser öffnen?</sys:String>
-    <sys:String x:Key="EmptyTextTitle">Kein Text zum Generieren des QR-Codes</sys:String>
-    <sys:String x:Key="EmptyTextMessage">Es gibt keinen Text, aus dem QR-Code generiert wird. Bitte geben Sie etwas ein und versuchen Sie es erneut.</sys:String>
+    <sys:String x:Key="EmptyTextTitle">Kein Text zum Erzeugen des QR-Codes</sys:String>
+    <sys:String x:Key="EmptyTextMessage">Es ist kein Text vorhanden, aus dem ein QR-Code generiert werden kann. Bitte geben Sie etwas ein und versuchen.</sys:String>
     <sys:String x:Key="NoQRGeneratedTitle">Kein QR-Code generiert</sys:String>
-    <sys:String x:Key="NoQRGeneratedMessage">Es wird kein QR-Code generiert. Bitte generieren Sie es zuerst.</sys:String>
-    <sys:String x:Key="NoDeviceTitle">Kein Gerät verfügbar</sys:String>
-    <sys:String x:Key="NoDeviceMessage">Es ist kein Videogerät verfügbar. Bitte schließen Sie das Videogerät an.</sys:String>
-    <sys:String x:Key="DeviceChangedTitle">Videogerät geändert</sys:String>
-    <sys:String x:Key="DeviceChangedMessage">Videogerät verbunden oder getrennt. Das Programm aktualisiert die verfügbaren Geräte.</sys:String>
+    <sys:String x:Key="NoQRGeneratedMessage">Es ist kein QR-Code generiert. Bitte generieren Sie ihn zuerst.</sys:String>
+    <sys:String x:Key="NoDeviceTitle">Kein Gerät vorhanden</sys:String>
+    <sys:String x:Key="NoDeviceMessage">Es ist kein Videogerät vorhanden. Bitte schließen Sie das Videogerät an.</sys:String>
+    <sys:String x:Key="DeviceChangedTitle">Videogerät gewechselt</sys:String>
+    <sys:String x:Key="DeviceChangedMessage">Das Videogerät wurde angeschlossen oder getrennt. Das Programm aktualisiert die verfügbaren Geräte.</sys:String>
 
 </ResourceDictionary>
