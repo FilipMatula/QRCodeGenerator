@@ -110,9 +110,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\BrowserDetector.cs" />
+    <Compile Include="Common\BrowserControl.cs" />
     <Compile Include="Common\CameraControl.cs" />
     <Compile Include="Common\LocUtil.cs" />
+    <Compile Include="Common\PictureBoxPainter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

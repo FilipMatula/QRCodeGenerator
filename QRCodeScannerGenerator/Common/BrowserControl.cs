@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QRCodeScannerGenerator.Common
 {
-    class BrowserDetector
+    public partial class BrowserControl
     {
         // Get installed browsers with paths
         public static List<Browser> GetBrowsers()

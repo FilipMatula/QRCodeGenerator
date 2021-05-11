@@ -5,18 +5,19 @@
     <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
 
     <!--Main menu-->
-    <sys:String x:Key="ScanQR">Scan QR</sys:String>
-    <sys:String x:Key="GenerateQR">QR-Code generieren</sys:String>
+    <sys:String x:Key="Scan">Scan</sys:String>
+    <sys:String x:Key="Generate">Generieren</sys:String>
     <sys:String x:Key="Settings">Einstellungen</sys:String>
 
     <!--Scan card-->
     <sys:String x:Key="Camera">Kamera:</sys:String>
+    <sys:String x:Key="Type">Typ:</sys:String>
     <sys:String x:Key="LastScannedText">Zuletzt gescannter Text:</sys:String>
     <sys:String x:Key="OpenURL">URL öffnen</sys:String>
+    <sys:String x:Key="Auto">Automatische Erkennung</sys:String>
 
     <!--Generate card-->
     <sys:String x:Key="Text">Text:</sys:String>
-    <sys:String x:Key="Generate">Generieren</sys:String>
     <sys:String x:Key="Save">Speichern</sys:String>
 
     <!--Settings card-->
