@@ -107,6 +107,21 @@ namespace QRCodeScannerGenerator
                 else
                     comboBox_Scan_Type.SelectedIndex = 0;
             }
+
+
+            foreach (BarcodeFormat format in possibleFormats)
+                comboBox_Generate_Type.Items.Add(format);
+            string savedGenerateTypeName = Properties.Settings.Default.Generate_code;
+            if (string.IsNullOrEmpty(savedGenerateTypeName))
+                comboBox_Generate_Type.SelectedIndex = 0;
+            else
+            {
+                BarcodeFormat read_format;
+                if (Enum.TryParse(savedGenerateTypeName, out read_format))
+                    comboBox_Generate_Type.SelectedItem = read_format;
+                else
+                    comboBox_Generate_Type.SelectedIndex = 0;
+            }
         }
 
         private void resetFocusCircleDimensions()
@@ -332,6 +347,12 @@ namespace QRCodeScannerGenerator
             pictureBoxScan.Update();
         }
 
+        private void comboBox_Generate_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Properties.Settings.Default.Generate_code = comboBox_Generate_Type.SelectedItem.ToString();
+            Properties.Settings.Default.Save();
+        }
+
         private Bitmap CropImage(System.Drawing.Image img, Rectangle cropArea)
         {
             Bitmap bmpImage = new Bitmap(img);
@@ -427,16 +448,17 @@ namespace QRCodeScannerGenerator
         {
             if (!string.IsNullOrEmpty(QRText_Generate.Text))
             {
+                BarcodeFormat format = (BarcodeFormat)comboBox_Generate_Type.SelectedItem;
                 BarcodeWriter barcodeWriter = new BarcodeWriter();
                 QrCodeEncodingOptions options = new QrCodeEncodingOptions
                 {
                     DisableECI = true,
                     CharacterSet = "UTF-8",
                     Width = 300,
-                    Height = 300,
+                    Height = format == BarcodeFormat.CODE_128 ? 100 : 300,
                 };
                 barcodeWriter.Options = options;
-                barcodeWriter.Format = BarcodeFormat.QR_CODE;
+                barcodeWriter.Format = (BarcodeFormat)comboBox_Generate_Type.SelectedItem;
                 var result = new Bitmap(barcodeWriter.Write(QRText_Generate.Text.Trim()));
                 pictureBoxGenerate.Image = result;
             }

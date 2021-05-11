@@ -46,5 +46,17 @@ namespace QRCodeScannerGenerator.Properties {
                 this["Scan_code"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Generate_code {
+            get {
+                return ((string)(this["Generate_code"]));
+            }
+            set {
+                this["Generate_code"] = value;
+            }
+        }
     }
 }
