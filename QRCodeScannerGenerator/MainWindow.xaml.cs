@@ -27,25 +27,22 @@ namespace QRCodeScannerGenerator
         FilterInfoCollection filterInfoCollection;
         FilterInfo currectDevice = null;
         VideoCaptureDevice captureDevice;
-        DispatcherTimer signalTimer;
+        DispatcherTimer scanDevices;
         List<BarcodeFormat> possibleFormats = new List<BarcodeFormat>() { BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 };
         System.Windows.Forms.NotifyIcon notifyIcon;
         WindowState storedWindowState = WindowState.Normal;
-        bool hideToTrayOnMinimize;
-        bool hideToTrayOnClose;
         bool forceClosing = false;
         #endregion
 
         #region ScanPageVariables
         System.Windows.Forms.PictureBox pictureBoxScan;
-        DispatcherTimer dispatcherTimer;
+        DispatcherTimer scanCodeTimer;
         bool showNoDeviceError = false;
         bool startUp = true;
         bool blockScanning = false;
-        long milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        long millisecondsFromLastScan = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         Rectangle scanRect;
         bool lowerRectangle = false;
-        //int i = 0;
         #endregion
 
         #region FocusCircle
@@ -70,10 +67,9 @@ namespace QRCodeScannerGenerator
         List<Browser> browsers;
         #endregion
 
-        #region TrayContextMenu
-        System.Windows.Forms.ContextMenu contextMenu;
-        System.Windows.Forms.MenuItem exitMenuItem;
-        System.Windows.Forms.MenuItem showMenuItem;
+        #region HooksAndAutotype
+        KeyboardHook hook = new KeyboardHook();
+        bool autotype = false;
         #endregion
 
         public MainWindow()
@@ -93,6 +89,23 @@ namespace QRCodeScannerGenerator
             IsVisibleChanged += MainWindow_IsVisibleChanged;
 
             // Initialize picture boxes
+            InitializePictureBoxes();
+
+            // Initialize timers
+            InitializeTimers();
+
+            // Initialize focus circle
+            resetFocusCircleDimensions();
+
+            // Initialize tray
+            InitializeTray();
+
+            // Register hotkey
+            RegisterHotkeys();
+        }
+
+        private void InitializePictureBoxes()
+        {
             pictureBoxScan = new System.Windows.Forms.PictureBox();
             pictureBoxScan.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             pictureBoxScan.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -104,25 +117,27 @@ namespace QRCodeScannerGenerator
             pictureBoxGenerate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             pictureBoxGenerate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             windowsFormsHost2.Child = pictureBoxGenerate;
+        }
 
-            // Initialize timers
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += DispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+        private void InitializeTimers()
+        {
+            scanCodeTimer = new DispatcherTimer();
+            scanCodeTimer.Tick += ScanCodeTimer_Tick;
+            scanCodeTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
 
-            signalTimer = new DispatcherTimer();
-            signalTimer.Tick += SignalTimer_Tick;
-            signalTimer.Interval = new TimeSpan(0, 0, 1);
-            signalTimer.Start();
+            scanDevices = new DispatcherTimer();
+            scanDevices.Tick += ScanDevices_Tick;
+            scanDevices.Interval = new TimeSpan(0, 0, 1);
+            scanDevices.Start();
 
             focusCircleTimer = new DispatcherTimer();
             focusCircleTimer.Tick += FocusCircleTimer_Tick;
             focusCircleTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+        }
 
-            // Initialize focus circle
-            resetFocusCircleDimensions();
-
-            // Initialize scannning type combobox
+        private void InitializeComboboxes()
+        {
+            // Type for scan combobox
             comboBox_Scan_Type.Items.Add(LocUtil.TranslatedString("Auto", this));
             foreach (BarcodeFormat format in possibleFormats)
                 comboBox_Scan_Type.Items.Add(format);
@@ -139,7 +154,7 @@ namespace QRCodeScannerGenerator
                     comboBox_Scan_Type.SelectedIndex = 0;
             }
 
-            // Initialize generating type combobox
+            // Type for generate combobox
             foreach (BarcodeFormat format in possibleFormats)
                 comboBox_Generate_Type.Items.Add(format);
             string savedGenerateTypeName = Properties.Settings.Default.Generate_code;
@@ -154,31 +169,67 @@ namespace QRCodeScannerGenerator
                     comboBox_Generate_Type.SelectedIndex = 0;
             }
 
-            // Initialize tray
+            // Browsers combobox
+            browsers = BrowserControl.GetBrowsers();
+            foreach (Browser browser in browsers)
+                comboBox_Browsers.Items.Add(browser.Name);
+
+            string savedBrowserName = Properties.Settings.Default.Browser;
+            if (string.IsNullOrEmpty(savedBrowserName))
+                comboBox_Browsers.SelectedIndex = 0;
+            else
+            {
+                var savedBrowser = browsers.Find(b => b.Name == savedBrowserName);
+                if (savedBrowser != null)
+                    comboBox_Browsers.SelectedItem = savedBrowserName;
+                else
+                    comboBox_Browsers.SelectedIndex = 0;
+            }
+        }
+
+        private void InitializeTray()
+        {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.BalloonTipText = "The app has been minimised. Double click the tray icon to show.";
             notifyIcon.BalloonTipTitle = "QR Code Scanner";
             notifyIcon.Text = "QR Code Scanner";
             notifyIcon.Icon = new Icon(Application.GetResourceStream(new Uri("pack://application:,,,/images/qrcode.ico")).Stream);
-            notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
-            contextMenu = new System.Windows.Forms.ContextMenu();
-            exitMenuItem = new System.Windows.Forms.MenuItem();
+            notifyIcon.DoubleClick += NotifyIcon_DoubleClick;           
+            notifyIcon.ContextMenu = createTrayMenu();
+        }
+
+        private System.Windows.Forms.ContextMenu createTrayMenu()
+        {
+            System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
+            System.Windows.Forms.MenuItem exitMenuItem = new System.Windows.Forms.MenuItem();
             exitMenuItem.Text = "Exit";
             exitMenuItem.Click += ExitMenuItem_Click;
-            showMenuItem = new System.Windows.Forms.MenuItem();
+            System.Windows.Forms.MenuItem showMenuItem = new System.Windows.Forms.MenuItem();
             showMenuItem.Text = "Show";
             showMenuItem.Click += ShowMenuItem_Click;
             contextMenu.MenuItems.Add(showMenuItem);
             contextMenu.MenuItems.Add("-");
             contextMenu.MenuItems.Add(exitMenuItem);
-            notifyIcon.ContextMenu = contextMenu;
 
+            return contextMenu;
+        }
 
-            // Initialize checkboxes
-            hideToTrayOnMinimize = Properties.Settings.Default.HideOnMinimize;
-            checkBox_HideToTrayOnMinimize.IsChecked = hideToTrayOnMinimize;
-            hideToTrayOnClose = Properties.Settings.Default.HideOnClose;
-            checkBox_HideToTrayOnClose.IsChecked = hideToTrayOnClose;
+        private void InitializeCheckboxes()
+        {
+            checkBox_HideToTrayOnMinimize.IsChecked = Properties.Settings.Default.HideOnMinimize;
+            checkBox_HideToTrayOnClose.IsChecked = Properties.Settings.Default.HideOnClose;
+        }
+
+        private void RegisterHotkeys()
+        {
+            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hotkey_Pressed);
+            hook.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Alt, System.Windows.Forms.Keys.D);
+        }
+
+        private void hotkey_Pressed(object sender, KeyPressedEventArgs e)
+        {
+            ShowFromTray();
+            autotype = true;
         }
 
         private void ShowMenuItem_Click(object sender, EventArgs e)
@@ -213,7 +264,7 @@ namespace QRCodeScannerGenerator
 
         private void MainWindow_StateChanged(object sender, EventArgs e)
         {
-            if (WindowState == WindowState.Minimized && hideToTrayOnMinimize)
+            if (WindowState == WindowState.Minimized && (bool)checkBox_HideToTrayOnMinimize.IsChecked)
                 HideToTray();
             else
                 storedWindowState = WindowState;
@@ -222,8 +273,8 @@ namespace QRCodeScannerGenerator
         // Stop camera on closing
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
-            if (!hideToTrayOnClose || forceClosing)
+            CameraControl.stopCameraStream(captureDevice, currectDevice, scanCodeTimer);
+            if (!(bool)checkBox_HideToTrayOnClose.IsChecked || forceClosing)
             {
                 notifyIcon.Dispose();
                 notifyIcon = null;
@@ -320,8 +371,7 @@ namespace QRCodeScannerGenerator
         // Painting rectangles on the picturebox
         private void pictureBoxScan_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            System.Windows.Forms.PictureBox pb = (System.Windows.Forms.PictureBox)sender;
-            scanRect = PictureBoxPainter.PaintRectangle(pb, e, lowerRectangle);
+            scanRect = PictureBoxPainter.PaintRectangle(pictureBoxScan, e, lowerRectangle);
 
             long CurrentMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             if (!focusPt.IsEmpty && (CurrentMilliseconds - focusCircleStart) < 1000)
@@ -331,11 +381,11 @@ namespace QRCodeScannerGenerator
         }
 
         // Timer for signal reveiving about new devices
-        private void SignalTimer_Tick(object sender, EventArgs e)
+        private void ScanDevices_Tick(object sender, EventArgs e)
         {
-            long CurrentMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long currentMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
-            if ((CurrentMilliseconds - milliseconds) < 3000)
+            if ((currentMilliseconds - millisecondsFromLastScan) < 3000)
                 return;
 
             FilterInfoCollection newfilterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -361,13 +411,13 @@ namespace QRCodeScannerGenerator
         private void MainWindow_Activated(object sender, EventArgs e)
         {
             if (ScanQR.IsVisible)
-                CameraControl.startCameraStream(captureDevice, currectDevice, dispatcherTimer);
+                CameraControl.startCameraStream(captureDevice, currectDevice, scanCodeTimer);
         }
 
         // When window is not activeate stop stream
         private void MainWindow_Deactivated(object sender, EventArgs e)
         {
-            CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
+            CameraControl.stopCameraStream(captureDevice, currectDevice, scanCodeTimer);
         }
 
         // Change selection visibility marker
@@ -378,20 +428,13 @@ namespace QRCodeScannerGenerator
         }
 
         // Open URL from readed qrcode
-        private void openURL()
+        private void openURL(string URL)
         {
-            if (!string.IsNullOrEmpty(QRText_Scan.Text))
-            {
-                Uri uriResult;
-                bool UriParseResult = Uri.TryCreate(QRText_Scan.Text, UriKind.Absolute, out uriResult)
+            Uri uriResult;
+            bool UriParseResult = Uri.TryCreate(URL, UriKind.Absolute, out uriResult)
                     && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-                if (UriParseResult)
-                    Process.Start(browsers[comboBox_Browsers.SelectedIndex].Path, QRText_Scan.Text);
-                else
-                    MessageBox.Show(LocUtil.TranslatedString("IncorrectURIMessage", this), LocUtil.TranslatedString("IncorrectURITitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-                MessageBox.Show(LocUtil.TranslatedString("NoQRScannedMessage", this), LocUtil.TranslatedString("NoQRScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (UriParseResult)
+                Process.Start(browsers[comboBox_Browsers.SelectedIndex].Path, URL);
         }
 
         // Show proper grid on type changed
@@ -443,11 +486,11 @@ namespace QRCodeScannerGenerator
         // On device change take video from camera (also on initialization)
         private void comboBox_Devices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
+            CameraControl.stopCameraStream(captureDevice, currectDevice, scanCodeTimer);
 
             initializeStream();
 
-            CameraControl.startCameraStream(captureDevice, currectDevice, dispatcherTimer);
+            CameraControl.startCameraStream(captureDevice, currectDevice, scanCodeTimer);
         }
 
         private void comboBox_Scan_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -476,81 +519,104 @@ namespace QRCodeScannerGenerator
         }
 
         // Try read qr code every second
-        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        private void ScanCodeTimer_Tick(object sender, EventArgs e)
         {
-            Bitmap bitmap = (Bitmap)pictureBoxScan.Image;
+            Bitmap bitmap = prepareBitmapToScan((Bitmap)pictureBoxScan.Image);
             if (bitmap == null)
                 return;
-
-            double widthScale = bitmap.Width / (double)pictureBoxScan.Width;
-            double heigthScale = bitmap.Height / (double)pictureBoxScan.Height;
-
-            int newRectWidth = (int)(scanRect.Width * widthScale);
-            int newRectHeight = (int)(scanRect.Height * heigthScale);
-
-            Rectangle imgScanArea = new Rectangle(bitmap.Width / 2 - newRectWidth / 2, bitmap.Height / 2 - newRectHeight / 2, newRectWidth, newRectHeight);
-            if (imgScanArea.Width > 0 && imgScanArea.Height > 0)
-                bitmap = CropImage(bitmap, imgScanArea);
-
-            //ImageFormat format = ImageFormat.Png;
-            //bitmap.Save("C:\\_LocalWorkspace\\Test\\Img_" + i + ".png", format);
-            //i++;
 
             BarcodeReader reader = new BarcodeReader
                 (null, newbitmap => new BitmapLuminanceSource(bitmap), luminance => new GlobalHistogramBinarizer(luminance));
 
             reader.AutoRotate = true;
             reader.TryInverted = true;
-            List<BarcodeFormat> formats_to_scan = new List<BarcodeFormat>();
-            if (comboBox_Scan_Type.SelectedIndex == 0)
-                formats_to_scan = possibleFormats;
-            else
-                formats_to_scan.Add((BarcodeFormat)comboBox_Scan_Type.SelectedItem);
-            reader.Options = new DecodingOptions { PossibleFormats = formats_to_scan };
+            reader.Options = new DecodingOptions { 
+                PossibleFormats = comboBox_Scan_Type.SelectedIndex == 0 ? possibleFormats : new List<BarcodeFormat>() { (BarcodeFormat)comboBox_Scan_Type.SelectedItem }
+            };
 
             var result = reader.Decode(bitmap);
             if (result != null && !blockScanning)
             {
-                string QRCodeText = result.ToString();
-                QRText_Scan.Text = QRCodeText;
-                CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
-                string text = LocUtil.TranslatedString("QRCodeScannedMessage", this) + QRCodeText;
-                Uri uriResult;
-                bool UriParseResult = Uri.TryCreate(QRCodeText, UriKind.Absolute, out uriResult)
-                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-                if (UriParseResult)
+                CameraControl.stopCameraStream(captureDevice, currectDevice, scanCodeTimer);
+                string scannedText = result.ToString();
+                Text_Scan.Text = scannedText;
+
+                if (autotype)
                 {
-                    text += "\n" + LocUtil.TranslatedString("QRCodeScannedMessage2", this);
-                    MessageBoxResult messageBoxResult = MessageBox.Show(text,
-                                              LocUtil.TranslatedString("QRCodeScannedTitle", this),
-                                              MessageBoxButton.YesNo,
-                                              MessageBoxImage.Question);
-                    if (messageBoxResult == MessageBoxResult.Yes)
-                        openURL();
+
+                    autotype = false;
                 }
                 else
                 {
-                    MessageBox.Show(text, LocUtil.TranslatedString("QRCodeScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Information);
+                    string text = LocUtil.TranslatedString("QRCodeScannedMessage", this) + " " + scannedText + ".\n" + "Text was copied to clipboard.";
+
+                    Uri uriResult;
+                    bool UriParseResult = Uri.TryCreate(scannedText, UriKind.Absolute, out uriResult)
+                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
+                    if (UriParseResult)
+                    {
+                        text += "\n" + LocUtil.TranslatedString("QRCodeScannedMessage2", this);
+                        MessageBoxResult messageBoxResult = MessageBox.Show(text,
+                                                  LocUtil.TranslatedString("QRCodeScannedTitle", this),
+                                                  MessageBoxButton.YesNo,
+                                                  MessageBoxImage.Question);
+                        if (messageBoxResult == MessageBoxResult.Yes)
+                            openURL(scannedText);
+                    }
+                    else
+                    {
+                        MessageBox.Show(text, LocUtil.TranslatedString("QRCodeScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
 
                 blockScanning = true;
-                CameraControl.startCameraStream(captureDevice, currectDevice, dispatcherTimer);
+                CameraControl.startCameraStream(captureDevice, currectDevice, scanCodeTimer);
             }
+        }
+
+        private Bitmap prepareBitmapToScan(Bitmap bitmap)
+        {
+            if (bitmap != null)
+            {
+                double widthScale = bitmap.Width / (double)pictureBoxScan.Width;
+                double heigthScale = bitmap.Height / (double)pictureBoxScan.Height;
+
+                int newRectWidth = (int)(scanRect.Width * widthScale);
+                int newRectHeight = (int)(scanRect.Height * heigthScale);
+
+                Rectangle imgScanArea = new Rectangle(bitmap.Width / 2 - newRectWidth / 2, bitmap.Height / 2 - newRectHeight / 2, newRectWidth, newRectHeight);
+                if (imgScanArea.Width > 0 && imgScanArea.Height > 0)
+                    bitmap = CropImage(bitmap, imgScanArea);
+            }
+
+            return bitmap;
         }
 
         // Stop / Start camera on mode changed
         private void ScanQR_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (!ScanQR.IsVisible)
-                CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
+                CameraControl.stopCameraStream(captureDevice, currectDevice, scanCodeTimer);
             else
-                CameraControl.startCameraStream(captureDevice, currectDevice, dispatcherTimer);
+                CameraControl.startCameraStream(captureDevice, currectDevice, scanCodeTimer);
         }
 
         // Open url when open button clicked
-        private void ButtonOpen_Click(object sender, RoutedEventArgs e)
+        private void ButtonOpenUrl_Click(object sender, RoutedEventArgs e)
         {
-            openURL();
+            if (!string.IsNullOrEmpty(Text_Scan.Text))
+            {
+                Uri uriResult;
+                bool UriParseResult = Uri.TryCreate(Text_Scan.Text, UriKind.Absolute, out uriResult)
+                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                if (UriParseResult)
+                    openURL(Text_Scan.Text);
+                else
+                    MessageBox.Show(LocUtil.TranslatedString("IncorrectURIMessage", this), LocUtil.TranslatedString("IncorrectURITitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+                MessageBox.Show(LocUtil.TranslatedString("NoQRScannedMessage", this), LocUtil.TranslatedString("NoQRScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         // Generate QR Code
@@ -611,7 +677,7 @@ namespace QRCodeScannerGenerator
         // Load list of devices
         private void LoadDevices(bool keepCurrent = false)
         {
-            CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
+            CameraControl.stopCameraStream(captureDevice, currectDevice, scanCodeTimer);
             if (!startUp)
             {
                 MessageBox.Show(LocUtil.TranslatedString("DeviceChangedMessage", this), LocUtil.TranslatedString("DeviceChangedTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -652,21 +718,11 @@ namespace QRCodeScannerGenerator
         {
             LoadDevices();
 
-            browsers = BrowserControl.GetBrowsers();
-            foreach (Browser browser in browsers)
-                comboBox_Browsers.Items.Add(browser.Name);
+            // Initialize comboboxs
+            InitializeComboboxes();
 
-            string savedBrowserName = Properties.Settings.Default.Browser;
-            if (string.IsNullOrEmpty(savedBrowserName))
-                comboBox_Browsers.SelectedIndex = 0;
-            else
-            {
-                var savedBrowser = browsers.Find(b => b.Name == savedBrowserName);
-                if (savedBrowser != null)
-                    comboBox_Browsers.SelectedItem = savedBrowserName;
-                else
-                    comboBox_Browsers.SelectedIndex = 0;
-            }
+            // Initialize checkboxes
+            InitializeCheckboxes();
         }
 
         // Activate devices plug and unplug signals
@@ -683,7 +739,7 @@ namespace QRCodeScannerGenerator
             const int WM_DEVICECHANGE = 0x0219;
             if (msg == WM_DEVICECHANGE)
             {
-                milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                millisecondsFromLastScan = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             }
             return IntPtr.Zero;
         }
@@ -733,16 +789,19 @@ namespace QRCodeScannerGenerator
 
         private void checkBox_HideToTrayOnMinimize_Click(object sender, RoutedEventArgs e)
         {
-            hideToTrayOnMinimize = (bool)checkBox_HideToTrayOnMinimize.IsChecked;
-            Properties.Settings.Default.HideOnMinimize = hideToTrayOnMinimize;
+            Properties.Settings.Default.HideOnMinimize = (bool)checkBox_HideToTrayOnMinimize.IsChecked;
             Properties.Settings.Default.Save();
         }
 
         private void checkBox_HideToTrayOnClose_Click(object sender, RoutedEventArgs e)
         {
-            hideToTrayOnClose = (bool)checkBox_HideToTrayOnClose.IsChecked;
-            Properties.Settings.Default.HideOnClose = hideToTrayOnClose;
+            Properties.Settings.Default.HideOnClose = (bool)checkBox_HideToTrayOnClose.IsChecked;
             Properties.Settings.Default.Save();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="Common\BrowserControl.cs" />
     <Compile Include="Common\CameraControl.cs" />
+    <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LocUtil.cs" />
     <Compile Include="Common\PictureBoxPainter.cs" />
     <Compile Include="MainWindow.xaml.cs">
