@@ -33,8 +33,8 @@
     <sys:String x:Key="QRCodeScannedMessage2">Möchten Sie es im Browser öffnen?</sys:String>
     <sys:String x:Key="EmptyTextTitle">Kein Text zum Erzeugen des QR-Codes</sys:String>
     <sys:String x:Key="EmptyTextMessage">Es ist kein Text vorhanden, aus dem ein QR-Code generiert werden kann. Bitte geben Sie etwas ein und versuchen.</sys:String>
-    <sys:String x:Key="NoQRGeneratedTitle">Kein QR-Code generiert</sys:String>
-    <sys:String x:Key="NoQRGeneratedMessage">Es ist kein QR-Code generiert. Bitte generieren Sie ihn zuerst.</sys:String>
+    <sys:String x:Key="NoGeneratedTitle">Kein QR-Code generiert</sys:String>
+    <sys:String x:Key="NoGeneratedMessage">Es ist kein QR-Code generiert. Bitte generieren Sie ihn zuerst.</sys:String>
     <sys:String x:Key="NoDeviceTitle">Kein Gerät vorhanden</sys:String>
     <sys:String x:Key="NoDeviceMessage">Es ist kein Videogerät vorhanden. Bitte schließen Sie das Videogerät an.</sys:String>
     <sys:String x:Key="DeviceChangedTitle">Videogerät gewechselt</sys:String>

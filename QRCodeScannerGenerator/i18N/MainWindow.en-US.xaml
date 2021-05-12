@@ -33,8 +33,8 @@
     <sys:String x:Key="QRCodeScannedMessage2">Do you want to open it in browser?</sys:String>
     <sys:String x:Key="EmptyTextTitle">No text to generate QR Code</sys:String>
     <sys:String x:Key="EmptyTextMessage">There is no text from which generate QR Code. Please type something and try again.</sys:String>
-    <sys:String x:Key="NoQRGeneratedTitle">No QR code generated</sys:String>
-    <sys:String x:Key="NoQRGeneratedMessage">There is no QR code generated. Please generate it first.</sys:String>
+    <sys:String x:Key="NoGeneratedTitle">No QR code generated</sys:String>
+    <sys:String x:Key="NoGeneratedMessage">There is no QR code generated. Please generate it first.</sys:String>
     <sys:String x:Key="NoDeviceTitle">No device available</sys:String>
     <sys:String x:Key="NoDeviceMessage">There is no video device available. Please plug video device.</sys:String>
     <sys:String x:Key="DeviceChangedTitle">Video device changed</sys:String>

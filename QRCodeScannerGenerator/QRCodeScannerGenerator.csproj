@@ -92,6 +92,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\Constants.cs" />
+    <Compile Include="GenerateWidget.xaml.cs">
+      <DependentUpon>GenerateWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanWidget.xaml.cs">
+      <DependentUpon>ScanWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsWidget.xaml.cs">
+      <DependentUpon>SettingsWidget.xaml</DependentUpon>
+    </Compile>
     <Content Include="i18N\MainWindow.en-US.xaml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -100,6 +110,18 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Page Include="GenerateWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScanWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Resource Include="images\flag_germany.png" />
     <Resource Include="images\flag_united_kingdom.png" />
     <Page Include="MainWindow.xaml">
