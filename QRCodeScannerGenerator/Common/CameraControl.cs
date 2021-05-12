@@ -11,9 +11,9 @@ namespace QRCodeScannerGenerator.Common
     public partial class CameraControl
     {
         // Start camera stream and timer
-        public static void startCameraStream(VideoCaptureDevice captureDevice, FilterInfo currectDevice, DispatcherTimer dispatcherTimer)
+        public static void startCameraStream(ref VideoCaptureDevice captureDevice, FilterInfo currectDevice, DispatcherTimer dispatcherTimer)
         {
-            if (currectDevice != null && captureDevice != null)
+            if (currectDevice != null && captureDevice != null && !captureDevice.IsRunning)
             {
                 captureDevice.Start();
                 dispatcherTimer.Start();
@@ -21,9 +21,9 @@ namespace QRCodeScannerGenerator.Common
         }
 
         // Stop camera stream and timer
-        public static void stopCameraStream(VideoCaptureDevice captureDevice, FilterInfo currectDevice, DispatcherTimer dispatcherTimer)
+        public static void stopCameraStream(ref VideoCaptureDevice captureDevice, FilterInfo currectDevice, DispatcherTimer dispatcherTimer)
         {
-            if (currectDevice != null && captureDevice != null)
+            if (currectDevice != null && captureDevice != null && captureDevice.IsRunning)
             {
                 dispatcherTimer.Stop();
                 captureDevice.Stop();

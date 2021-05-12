@@ -115,6 +115,7 @@
     <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LocUtil.cs" />
     <Compile Include="Common\PictureBoxPainter.cs" />
+    <Compile Include="Common\StringExtension.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
