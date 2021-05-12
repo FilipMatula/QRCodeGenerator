@@ -11,13 +11,9 @@
         ContentRendered="Window_ContentRendered">
 
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="i18N/MainWindow.en-US.xaml"></ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <Image x:Key="trayIcon" Source="/images/qrcode.ico" />
     </Window.Resources>
-    
+
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -110,13 +106,13 @@
                 </Grid>
                 <WindowsFormsHost Grid.Row="2" Grid.ColumnSpan="2" Margin="20 20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="windowsFormsHost1" Background="White"/>
             </Grid>
-            <Grid x:Name="GenerateQR">
+            <Grid x:Name="GenerateQR" Visibility="Hidden">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition  Height="70" />
+                    <RowDefinition  Height="40" />
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
@@ -131,17 +127,22 @@
 
                 <WindowsFormsHost Grid.Row="1" Grid.ColumnSpan="2" Margin="20 20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="windowsFormsHost2" Background="White"/>
             </Grid>
-            <Grid x:Name="Settings" Visibility="Hidden">
+            <Grid x:Name="Settings">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition  Height="70" />
+                    <RowDefinition  Height="40" />
+                    <RowDefinition  Height="40" />
+                    <RowDefinition  Height="40" />
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+                <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="Hide to tray on minimize" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="Hide to tray on close" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
+
+                <Grid Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch">
                     <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="55" Content="{DynamicResource ResourceKey=Browser}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <ComboBox Grid.Column="1" Grid.Row="0" Margin="75 0 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" x:Name="comboBox_Browsers" SelectionChanged="comboBox_Browsers_SelectionChanged"/>
                 </Grid>

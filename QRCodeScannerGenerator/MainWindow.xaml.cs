@@ -23,22 +23,33 @@ namespace QRCodeScannerGenerator
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region GeneralVariables
         FilterInfoCollection filterInfoCollection;
         FilterInfo currectDevice = null;
         VideoCaptureDevice captureDevice;
-        System.Windows.Forms.PictureBox pictureBoxScan;
-        System.Windows.Forms.PictureBox pictureBoxGenerate;
-        DispatcherTimer dispatcherTimer;
         DispatcherTimer signalTimer;
-        DispatcherTimer focusCircleTimer;
+        List<BarcodeFormat> possibleFormats = new List<BarcodeFormat>() { BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 };
+        System.Windows.Forms.NotifyIcon notifyIcon;
+        WindowState storedWindowState = WindowState.Normal;
+        bool hideToTrayOnMinimize;
+        bool hideToTrayOnClose;
+        bool forceClosing = false;
+        #endregion
+
+        #region ScanPageVariables
+        System.Windows.Forms.PictureBox pictureBoxScan;
+        DispatcherTimer dispatcherTimer;
         bool showNoDeviceError = false;
         bool startUp = true;
         bool blockScanning = false;
-        List<Browser> browsers;
         long milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-        long focusCircleStart = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         Rectangle scanRect;
+        bool lowerRectangle = false;
         //int i = 0;
+        #endregion
+
+        #region FocusCircle
+        DispatcherTimer focusCircleTimer;
         int currentOuterDiameter;
         int currentInnerDiameter;
         int focusCircleOuterDiameter = 50;
@@ -47,21 +58,39 @@ namespace QRCodeScannerGenerator
         int focusCircleInnerDiameterBounce = 5;
         bool raising = true;
         bool moving = true;
+        long focusCircleStart = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         System.Drawing.Point focusPt;
-        List<BarcodeFormat> possibleFormats = new List<BarcodeFormat>() { BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 };
-        bool lowerRectangle = false;
+        #endregion
+
+        #region GeneratePageVariables
+        System.Windows.Forms.PictureBox pictureBoxGenerate;
+        #endregion
+
+        #region SettingsPageVariables
+        List<Browser> browsers;
+        #endregion
+
+        #region TrayContextMenu
+        System.Windows.Forms.ContextMenu contextMenu;
+        System.Windows.Forms.MenuItem exitMenuItem;
+        System.Windows.Forms.MenuItem showMenuItem;
+        #endregion
 
         public MainWindow()
         {
             InitializeComponent();
 
+            // Language initialization
             LocUtil.SetDefaultLanguage(this);
             OnLanguageChanged(LocUtil.GetCurrentCultureName(this));
 
+            // Overwrite main events
             Closing += MainWindow_Closing;
             Deactivated += MainWindow_Deactivated;
             Activated += MainWindow_Activated;
             ScanQR.IsVisibleChanged += ScanQR_IsVisibleChanged;
+            StateChanged += MainWindow_StateChanged;
+            IsVisibleChanged += MainWindow_IsVisibleChanged;
 
             // Initialize picture boxes
             pictureBoxScan = new System.Windows.Forms.PictureBox();
@@ -90,8 +119,10 @@ namespace QRCodeScannerGenerator
             focusCircleTimer.Tick += FocusCircleTimer_Tick;
             focusCircleTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
 
+            // Initialize focus circle
             resetFocusCircleDimensions();
 
+            // Initialize scannning type combobox
             comboBox_Scan_Type.Items.Add(LocUtil.TranslatedString("Auto", this));
             foreach (BarcodeFormat format in possibleFormats)
                 comboBox_Scan_Type.Items.Add(format);
@@ -108,7 +139,7 @@ namespace QRCodeScannerGenerator
                     comboBox_Scan_Type.SelectedIndex = 0;
             }
 
-
+            // Initialize generating type combobox
             foreach (BarcodeFormat format in possibleFormats)
                 comboBox_Generate_Type.Items.Add(format);
             string savedGenerateTypeName = Properties.Settings.Default.Generate_code;
@@ -122,6 +153,91 @@ namespace QRCodeScannerGenerator
                 else
                     comboBox_Generate_Type.SelectedIndex = 0;
             }
+
+            // Initialize tray
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.BalloonTipText = "The app has been minimised. Double click the tray icon to show.";
+            notifyIcon.BalloonTipTitle = "QR Code Scanner";
+            notifyIcon.Text = "QR Code Scanner";
+            notifyIcon.Icon = new Icon(Application.GetResourceStream(new Uri("pack://application:,,,/images/qrcode.ico")).Stream);
+            notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+            contextMenu = new System.Windows.Forms.ContextMenu();
+            exitMenuItem = new System.Windows.Forms.MenuItem();
+            exitMenuItem.Text = "Exit";
+            exitMenuItem.Click += ExitMenuItem_Click;
+            showMenuItem = new System.Windows.Forms.MenuItem();
+            showMenuItem.Text = "Show";
+            showMenuItem.Click += ShowMenuItem_Click;
+            contextMenu.MenuItems.Add(showMenuItem);
+            contextMenu.MenuItems.Add("-");
+            contextMenu.MenuItems.Add(exitMenuItem);
+            notifyIcon.ContextMenu = contextMenu;
+
+
+            // Initialize checkboxes
+            hideToTrayOnMinimize = Properties.Settings.Default.HideOnMinimize;
+            checkBox_HideToTrayOnMinimize.IsChecked = hideToTrayOnMinimize;
+            hideToTrayOnClose = Properties.Settings.Default.HideOnClose;
+            checkBox_HideToTrayOnClose.IsChecked = hideToTrayOnClose;
+        }
+
+        private void ShowMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowFromTray();
+        }
+
+        private void ExitMenuItem_Click(object sender, EventArgs e)
+        {
+            forceClosing = true;
+            Application.Current.Shutdown();
+        }
+
+        private void HideToTray()
+        {
+            Hide();
+            if (notifyIcon != null)
+                notifyIcon.ShowBalloonTip(2000);
+        }
+
+        private void ShowFromTray()
+        {
+            Show();
+            WindowState = storedWindowState;
+        }
+
+        private void MainWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (notifyIcon != null)
+                notifyIcon.Visible = !IsVisible;
+        }
+
+        private void MainWindow_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized && hideToTrayOnMinimize)
+                HideToTray();
+            else
+                storedWindowState = WindowState;
+        }
+
+        // Stop camera on closing
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
+            if (!hideToTrayOnClose || forceClosing)
+            {
+                notifyIcon.Dispose();
+                notifyIcon = null;
+            }
+            else
+            {
+                e.Cancel = true;
+                HideToTray();
+            }
+        }
+
+        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            ShowFromTray();
         }
 
         private void resetFocusCircleDimensions()
@@ -431,12 +547,6 @@ namespace QRCodeScannerGenerator
                 CameraControl.startCameraStream(captureDevice, currectDevice, dispatcherTimer);
         }
 
-        // Stop camera on closing
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            CameraControl.stopCameraStream(captureDevice, currectDevice, dispatcherTimer);
-        }
-
         // Open url when open button clicked
         private void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
@@ -619,6 +729,20 @@ namespace QRCodeScannerGenerator
                 default:
                     break;
             }
+        }
+
+        private void checkBox_HideToTrayOnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            hideToTrayOnMinimize = (bool)checkBox_HideToTrayOnMinimize.IsChecked;
+            Properties.Settings.Default.HideOnMinimize = hideToTrayOnMinimize;
+            Properties.Settings.Default.Save();
+        }
+
+        private void checkBox_HideToTrayOnClose_Click(object sender, RoutedEventArgs e)
+        {
+            hideToTrayOnClose = (bool)checkBox_HideToTrayOnClose.IsChecked;
+            Properties.Settings.Default.HideOnClose = hideToTrayOnClose;
+            Properties.Settings.Default.Save();
         }
     }
 }
