@@ -56,13 +56,13 @@ namespace QRCodeScannerGenerator
 
         private void checkBox_HideToTrayOnMinimize_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.HideOnMinimize = (bool)checkBox_HideToTrayOnMinimize.IsChecked;
+            Properties.Settings.Default.HideOnMinimize = HideToTrayOnMinimize;
             Properties.Settings.Default.Save();
         }
 
         private void checkBox_HideToTrayOnClose_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.HideOnClose = (bool)checkBox_HideToTrayOnClose.IsChecked;
+            Properties.Settings.Default.HideOnClose = HideToTrayOnClose;
             Properties.Settings.Default.Save();
         }
     }

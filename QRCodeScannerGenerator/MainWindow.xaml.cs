@@ -133,7 +133,12 @@ namespace QRCodeScannerGenerator
 
         private void hotkey_Pressed(object sender, KeyPressedEventArgs e)
         {
-            ShowFromTray();
+            if (IsInTray())
+                ShowFromTray();
+            else
+                WindowState = WindowState.Normal;
+
+            ListViewMenu.SelectedIndex = 0;
             ScanWidget.IsAutotype = true;
         }
 
@@ -161,6 +166,14 @@ namespace QRCodeScannerGenerator
             WindowState = storedWindowState;
         }
 
+        private bool IsInTray()
+        {
+            if (notifyIcon != null && notifyIcon.Visible)
+                return true;
+
+            return false;
+        }
+
         private void MainWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (notifyIcon != null)
@@ -169,6 +182,7 @@ namespace QRCodeScannerGenerator
 
         private void MainWindow_StateChanged(object sender, EventArgs e)
         {
+            ScanWidget.IsAutotype = false;
             if (WindowState == WindowState.Minimized && SettingsWidget.HideToTrayOnMinimize)
                 HideToTray();
             else
@@ -179,6 +193,7 @@ namespace QRCodeScannerGenerator
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ScanWidget.stopCameraStream();
+            ScanWidget.IsAutotype = false;
             if (!SettingsWidget.HideToTrayOnClose || forceClosing)
             {
                 notifyIcon.Dispose();

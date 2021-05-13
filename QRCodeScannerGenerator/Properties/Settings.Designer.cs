@@ -82,5 +82,29 @@ namespace QRCodeScannerGenerator.Properties {
                 this["HideOnClose"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public int GenerateWidth {
+            get {
+                return ((int)(this["GenerateWidth"]));
+            }
+            set {
+                this["GenerateWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int GenerateHeight {
+            get {
+                return ((int)(this["GenerateHeight"]));
+            }
+            set {
+                this["GenerateHeight"] = value;
+            }
+        }
     }
 }
