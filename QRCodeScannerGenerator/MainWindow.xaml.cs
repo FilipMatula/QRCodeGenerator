@@ -1,21 +1,13 @@
 ﻿using AForge.Video.DirectShow;
 using QRCodeScannerGenerator.Common;
-using QRCodeScannerGenerator.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using ZXing;
-using ZXing.Common;
-using ZXing.QrCode;
 
 namespace QRCodeScannerGenerator
 {
