@@ -20,17 +20,17 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="Hide to tray on minimize" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
-        <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="Hide to tray on close" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
+        <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="Hide to tray on minimize" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
+        <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="Hide to tray on close" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
 
-        <Grid Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch">
+        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
             <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="55" Content="{DynamicResource ResourceKey=Browser}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <ComboBox Grid.Column="1" Grid.Row="0" Margin="75 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" x:Name="comboBox_Browsers" SelectionChanged="comboBox_Browsers_SelectionChanged"/>
         </Grid>
 
         <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
             <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="105" Content="Autotype hotkey:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <controls:HotkeyTextBox Grid.Column="1" Grid.Row="0" Margin="110 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Hotkey="{Binding AutotypeHotkey, Mode=TwoWay}" Style="{DynamicResource MaterialDesignTextBox}"></controls:HotkeyTextBox>
+            <controls:HotkeyTextBox x:Name="Hotkey_Autotype" Grid.Column="1" Grid.Row="0" Margin="110 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Hotkey="{Binding AutotypeHotkey, Mode=TwoWay}" Style="{DynamicResource MaterialDesignTextBox}" hotkeyChanged="Hotkey_Autotype_hotkeyChanged"></controls:HotkeyTextBox>
         </Grid>
     </Grid>
 </UserControl>

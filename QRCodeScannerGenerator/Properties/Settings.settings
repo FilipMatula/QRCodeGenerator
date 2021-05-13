@@ -23,5 +23,8 @@
     <Setting Name="GenerateHeight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="AutotypeHotkey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Ctrl + Alt + D</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

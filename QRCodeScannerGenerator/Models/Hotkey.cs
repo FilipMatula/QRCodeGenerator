@@ -13,10 +13,48 @@ namespace QRCodeScannerGenerator.Models
 
         public ModifierKeys Modifiers { get; }
 
-        public Hotkey(System.Windows.Forms.Keys key = System.Windows.Forms.Keys.None, ModifierKeys modifiers = ModifierKeys.None)
+        public Hotkey()
+        {
+            Key = System.Windows.Forms.Keys.None;
+            Modifiers = ModifierKeys.None;
+        }
+
+        public Hotkey(System.Windows.Forms.Keys key, ModifierKeys modifiers)
         {
             Key = key;
             Modifiers = modifiers;
+        }
+
+        public Hotkey(string str)
+        {
+            Key = System.Windows.Forms.Keys.None;
+            Modifiers = ModifierKeys.None;
+            if (String.IsNullOrEmpty(str) || str == "< None >")
+            {
+                Key = System.Windows.Forms.Keys.None;
+                Modifiers = ModifierKeys.None;
+            }
+            else
+            {
+                var keys = str.Split('+');
+                foreach (string key in keys)
+                {
+                    string keyTxt = key.Trim();
+                    if (keyTxt == "Ctrl")
+                        Modifiers |= ModifierKeys.Control;
+                    else if (keyTxt == "Shift")
+                        Modifiers |= ModifierKeys.Shift;
+                    else if (keyTxt == "Alt")
+                        Modifiers |= ModifierKeys.Alt;
+                    else if (keyTxt == "Win")
+                        Modifiers |= ModifierKeys.Win;
+                    else
+                    {
+                        System.Windows.Forms.KeysConverter kc = new System.Windows.Forms.KeysConverter();
+                        Key = (System.Windows.Forms.Keys)kc.ConvertFromString(keyTxt);
+                    }
+                }
+            }
         }
 
         public override string ToString()

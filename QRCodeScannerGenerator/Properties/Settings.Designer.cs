@@ -106,5 +106,17 @@ namespace QRCodeScannerGenerator.Properties {
                 this["GenerateHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Ctrl + Alt + D")]
+        public string AutotypeHotkey {
+            get {
+                return ((string)(this["AutotypeHotkey"]));
+            }
+            set {
+                this["AutotypeHotkey"] = value;
+            }
+        }
     }
 }

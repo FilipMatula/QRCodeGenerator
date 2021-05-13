@@ -32,6 +32,7 @@ namespace QRCodeScannerGenerator
 
         #region HooksAndAutotype
         KeyboardHook hook = new KeyboardHook();
+        int AutotypeHotkeyId;
         #endregion
 
         public MainWindow()
@@ -50,6 +51,7 @@ namespace QRCodeScannerGenerator
             IsVisibleChanged += MainWindow_IsVisibleChanged;
             ScanWidget.URLOpened += openURL;
             ScanWidget.Autotyped += ScanWidget_Autotyped;
+            SettingsWidget.HotkeyChanged += SettingsWidget_HotkeyChanged;
 
             // Initialize picture boxes
             InitializePictureBoxes();
@@ -62,6 +64,12 @@ namespace QRCodeScannerGenerator
 
             // Register hotkey
             RegisterHotkeys();
+        }
+
+        private void SettingsWidget_HotkeyChanged()
+        {
+            hook.UnregisterHotKey(AutotypeHotkeyId);
+            AutotypeHotkeyId = hook.RegisterHotKey(SettingsWidget.AutotypeHotkey.Modifiers, SettingsWidget.AutotypeHotkey.Key);
         }
 
         private void ScanWidget_Autotyped(string obj)
@@ -128,13 +136,16 @@ namespace QRCodeScannerGenerator
         private void RegisterHotkeys()
         {
             hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hotkey_Pressed);
-            hook.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Alt, System.Windows.Forms.Keys.D);
+            AutotypeHotkeyId = hook.RegisterHotKey(SettingsWidget.AutotypeHotkey.Modifiers, SettingsWidget.AutotypeHotkey.Key);
         }
 
         private void hotkey_Pressed(object sender, KeyPressedEventArgs e)
         {
-            if (e.Key == System.Windows.Forms.Keys.D && e.Modifier == (ModifierKeys.Alt | ModifierKeys.Control))
+            if (e.Key == SettingsWidget.AutotypeHotkey.Key && e.Modifier == SettingsWidget.AutotypeHotkey.Modifiers)
             {
+                if (WindowState != WindowState.Minimized)
+                    return;
+
                 if (IsInTray())
                     ShowFromTray();
                 else

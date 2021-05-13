@@ -17,6 +17,8 @@ namespace QRCodeScannerGenerator.Controls
             DependencyProperty.Register(nameof(Hotkey), typeof(Hotkey), typeof(HotkeyTextBox),
                 new FrameworkPropertyMetadata(default(Hotkey), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HotKeyChanged));
 
+        public event Action<string> hotkeyChanged;
+
         private static void HotKeyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (sender is HotkeyTextBox control)
@@ -91,6 +93,7 @@ namespace QRCodeScannerGenerator.Controls
 
             // Set value
             Hotkey = new Hotkey((System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(key), Common.KeyboardHook.convertFromWPF(modifiers));
+            hotkeyChanged?.Invoke(Hotkey.ToString());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using QRCodeScannerGenerator.Common;
 using QRCodeScannerGenerator.Models;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,10 +18,14 @@ namespace QRCodeScannerGenerator
         public bool HideToTrayOnClose { get { return (bool)checkBox_HideToTrayOnClose.IsChecked; } }
         public Hotkey AutotypeHotkey { get; set; } = new Hotkey();
 
+        public event Action HotkeyChanged;
+
         public SettingsWidget()
         {
             DataContext = this;
             InitializeComponent();
+
+            InitializeTextboxes();
         }
 
         public void InitializeComboboxes()
@@ -49,6 +54,11 @@ namespace QRCodeScannerGenerator
             checkBox_HideToTrayOnClose.IsChecked = Properties.Settings.Default.HideOnClose;
         }
 
+        private void InitializeTextboxes()
+        {
+            Hotkey_Autotype.Hotkey = new Hotkey(Properties.Settings.Default.AutotypeHotkey);
+        }
+
         // Save browser user settings
         private void comboBox_Browsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -67,6 +77,14 @@ namespace QRCodeScannerGenerator
         {
             Properties.Settings.Default.HideOnClose = HideToTrayOnClose;
             Properties.Settings.Default.Save();
+        }
+
+        private void Hotkey_Autotype_hotkeyChanged(string obj)
+        {
+            Properties.Settings.Default.AutotypeHotkey = obj;
+            Properties.Settings.Default.Save();
+
+            HotkeyChanged?.Invoke();
         }
     }
 }
