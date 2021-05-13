@@ -1,4 +1,5 @@
-﻿using QRCodeScannerGenerator.Common;
+﻿using Microsoft.Win32;
+using QRCodeScannerGenerator.Common;
 using QRCodeScannerGenerator.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace QRCodeScannerGenerator
         public string BrowserPath { get { return browsers[comboBox_Browsers.SelectedIndex].Path; } }
         public bool HideToTrayOnMinimize { get { return (bool)checkBox_HideToTrayOnMinimize.IsChecked; } }
         public bool HideToTrayOnClose { get { return (bool)checkBox_HideToTrayOnClose.IsChecked; } }
+        public bool Autostart { get { return (bool)checkBox_Autostart.IsChecked; } }
+        public bool Autostart_minimized { get { return (bool)checkBox_Autostart_minimized.IsChecked; } }
         public Hotkey AutotypeHotkey { get; set; } = new Hotkey();
 
         public event Action HotkeyChanged;
@@ -52,6 +55,10 @@ namespace QRCodeScannerGenerator
         {
             checkBox_HideToTrayOnMinimize.IsChecked = Properties.Settings.Default.HideOnMinimize;
             checkBox_HideToTrayOnClose.IsChecked = Properties.Settings.Default.HideOnClose;
+            checkBox_Autostart.IsChecked = Properties.Settings.Default.Autostart;
+            checkBox_Autostart_minimized.IsChecked = Properties.Settings.Default.Autostart_minimized;
+
+            checkBox_Autostart_minimized.IsEnabled = Autostart;
         }
 
         private void InitializeTextboxes()
@@ -64,7 +71,6 @@ namespace QRCodeScannerGenerator
         {
             Properties.Settings.Default.Browser = comboBox_Browsers.SelectedItem.ToString();
             Properties.Settings.Default.Save();
-            //HotkeyText = comboBox_Browsers.SelectedItem.ToString();
         }
 
         private void checkBox_HideToTrayOnMinimize_Click(object sender, RoutedEventArgs e)
@@ -85,6 +91,48 @@ namespace QRCodeScannerGenerator
             Properties.Settings.Default.Save();
 
             HotkeyChanged?.Invoke();
+        }
+
+        private void AddToAutostart(bool minimized)
+        {
+            var regPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(regPath, true);
+            var programPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            if (minimized)
+                programPath += " /StartMinimized";
+            key.SetValue("CodeScanner", programPath);
+        }
+
+        private void DeleteFromAutostart()
+        {
+            var regPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(regPath, true);
+            key.DeleteValue("CodeScanner", false);
+        }
+
+        private void checkBox_Autostart_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Autostart = Autostart;
+            Properties.Settings.Default.Save();
+
+            checkBox_Autostart_minimized.IsEnabled = Autostart;
+            UpdateAutostart();
+        }
+
+        private void checkBox_Autostart_minimized_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Autostart_minimized = Autostart_minimized;
+            Properties.Settings.Default.Save();
+
+            UpdateAutostart();
+        }
+
+        private void UpdateAutostart()
+        {
+            if (Autostart)
+                AddToAutostart(Autostart_minimized);
+            else
+                DeleteFromAutostart();
         }
     }
 }

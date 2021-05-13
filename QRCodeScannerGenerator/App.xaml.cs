@@ -18,5 +18,19 @@ namespace QRCodeScannerGenerator
         {
 
         }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            bool start_minimized = false;
+            for (int i = 0; i != e.Args.Length; ++i)
+            {
+                if (e.Args[i] == "/StartMinimized")
+                {
+                    start_minimized = true;
+                }
+            }
+
+            Application.Current.Properties.Add("Start_Minimized", start_minimized);
+        }
     }
 }

@@ -131,6 +131,9 @@ namespace QRCodeScannerGenerator
             if (bitmap == null)
                 return;
 
+            if (comboBox_Scan_Type.SelectedIndex == -1)
+                return;
+
             BarcodeReader reader = new BarcodeReader
                 (null, newbitmap => new BitmapLuminanceSource(bitmap), luminance => new GlobalHistogramBinarizer(luminance));
 

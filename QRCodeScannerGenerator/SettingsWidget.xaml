@@ -10,10 +10,12 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="WhiteSmoke">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition  Height="40" />
+            <RowDefinition  Height="40" />
             <RowDefinition  Height="40" />
             <RowDefinition  Height="40" />
             <RowDefinition  Height="40" />
@@ -22,6 +24,8 @@
 
         <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="Hide to tray on minimize" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
         <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="Hide to tray on close" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
+        <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBox_Autostart" Margin="10 0" Content="Run application on Windows startup" Click="checkBox_Autostart_Click"></CheckBox>
+        <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBox_Autostart_minimized" Margin="25 0" Content="Run minimized on Windows startup" Click="checkBox_Autostart_minimized_Click"></CheckBox>
 
         <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
             <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="55" Content="{DynamicResource ResourceKey=Browser}" HorizontalAlignment="Left" VerticalAlignment="Center"/>

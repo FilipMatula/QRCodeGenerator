@@ -59,11 +59,14 @@ namespace QRCodeScannerGenerator
             // Initialize timers
             InitializeTimers();
 
+            // Register hotkey
+            RegisterHotkeys();
+
             // Initialize tray
             InitializeTray();
 
-            // Register hotkey
-            RegisterHotkeys();
+            if ((bool)Application.Current.Properties["Start_Minimized"] == true)
+                WindowState = WindowState.Minimized;
         }
 
         private void SettingsWidget_HotkeyChanged()
@@ -167,7 +170,7 @@ namespace QRCodeScannerGenerator
             Application.Current.Shutdown();
         }
 
-        private void HideToTray()
+        public void HideToTray()
         {
             Hide();
             if (notifyIcon != null)
@@ -234,7 +237,7 @@ namespace QRCodeScannerGenerator
                 return;
 
             FilterInfoCollection newfilterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-            if (ScanWidget.FilterInfoCollection.Count == newfilterInfoCollection.Count)
+            if (ScanWidget.FilterInfoCollection != null && ScanWidget.FilterInfoCollection.Count == newfilterInfoCollection.Count)
                 return;
             else
             {
@@ -378,6 +381,9 @@ namespace QRCodeScannerGenerator
 
             // Initialize checkboxes
             InitializeCheckboxes();
+
+            if ((bool)Application.Current.Properties["Start_Minimized"] == true)
+                HideToTray();
         }
 
         // Activate devices plug and unplug signals

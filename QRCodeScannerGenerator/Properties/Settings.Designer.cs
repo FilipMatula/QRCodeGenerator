@@ -118,5 +118,29 @@ namespace QRCodeScannerGenerator.Properties {
                 this["AutotypeHotkey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Autostart {
+            get {
+                return ((bool)(this["Autostart"]));
+            }
+            set {
+                this["Autostart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Autostart_minimized {
+            get {
+                return ((bool)(this["Autostart_minimized"]));
+            }
+            set {
+                this["Autostart_minimized"] = value;
+            }
+        }
     }
 }
