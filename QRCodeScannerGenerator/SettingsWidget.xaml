@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QRCodeScannerGenerator"
+             xmlns:controls="clr-namespace:QRCodeScannerGenerator.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -24,7 +25,12 @@
 
         <Grid Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch">
             <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="55" Content="{DynamicResource ResourceKey=Browser}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <ComboBox Grid.Column="1" Grid.Row="0" Margin="75 0 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" x:Name="comboBox_Browsers" SelectionChanged="comboBox_Browsers_SelectionChanged"/>
+            <ComboBox Grid.Column="1" Grid.Row="0" Margin="75 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" x:Name="comboBox_Browsers" SelectionChanged="comboBox_Browsers_SelectionChanged"/>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
+            <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="105" Content="Autotype hotkey:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <controls:HotkeyTextBox Grid.Column="1" Grid.Row="0" Margin="110 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Hotkey="{Binding AutotypeHotkey, Mode=TwoWay}" Style="{DynamicResource MaterialDesignTextBox}"></controls:HotkeyTextBox>
         </Grid>
     </Grid>
 </UserControl>

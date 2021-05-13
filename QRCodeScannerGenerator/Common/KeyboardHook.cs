@@ -10,6 +10,21 @@ namespace QRCodeScannerGenerator.Common
 {
     public sealed class KeyboardHook : IDisposable
     {
+        public static ModifierKeys convertFromWPF(System.Windows.Input.ModifierKeys modifiers)
+        {
+            ModifierKeys modifier = ModifierKeys.None;
+            if (modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
+                modifier |= ModifierKeys.Control;
+            if (modifiers.HasFlag(System.Windows.Input.ModifierKeys.Shift))
+                modifier |= ModifierKeys.Shift;
+            if (modifiers.HasFlag(System.Windows.Input.ModifierKeys.Alt))
+                modifier |= ModifierKeys.Alt;
+            if (modifiers.HasFlag(System.Windows.Input.ModifierKeys.Windows))
+                modifier |= ModifierKeys.Win;
+
+            return modifier;
+        }
+
         // Registers a hot key with Windows.
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
@@ -144,6 +159,7 @@ namespace QRCodeScannerGenerator.Common
     [Flags]
     public enum ModifierKeys : uint
     {
+        None = 0,
         Alt = 1,
         Control = 2,
         Shift = 4,

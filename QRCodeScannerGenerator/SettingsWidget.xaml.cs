@@ -15,9 +15,11 @@ namespace QRCodeScannerGenerator
         public string BrowserPath { get { return browsers[comboBox_Browsers.SelectedIndex].Path; } }
         public bool HideToTrayOnMinimize { get { return (bool)checkBox_HideToTrayOnMinimize.IsChecked; } }
         public bool HideToTrayOnClose { get { return (bool)checkBox_HideToTrayOnClose.IsChecked; } }
+        public Hotkey AutotypeHotkey { get; set; } = new Hotkey();
 
         public SettingsWidget()
         {
+            DataContext = this;
             InitializeComponent();
         }
 
@@ -52,6 +54,7 @@ namespace QRCodeScannerGenerator
         {
             Properties.Settings.Default.Browser = comboBox_Browsers.SelectedItem.ToString();
             Properties.Settings.Default.Save();
+            //HotkeyText = comboBox_Browsers.SelectedItem.ToString();
         }
 
         private void checkBox_HideToTrayOnMinimize_Click(object sender, RoutedEventArgs e)

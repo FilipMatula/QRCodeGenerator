@@ -75,6 +75,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Tyrrrz.Extensions, Version=1.6.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tyrrrz.Extensions.1.6.5\lib\net45\Tyrrrz.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -93,9 +96,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Controls\HotkeyTextBox.cs" />
     <Compile Include="GenerateWidget.xaml.cs">
       <DependentUpon>GenerateWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Hotkey.cs" />
     <Compile Include="ScanWidget.xaml.cs">
       <DependentUpon>ScanWidget.xaml</DependentUpon>
     </Compile>

@@ -133,13 +133,16 @@ namespace QRCodeScannerGenerator
 
         private void hotkey_Pressed(object sender, KeyPressedEventArgs e)
         {
-            if (IsInTray())
-                ShowFromTray();
-            else
-                WindowState = WindowState.Normal;
+            if (e.Key == System.Windows.Forms.Keys.D && e.Modifier == (ModifierKeys.Alt | ModifierKeys.Control))
+            {
+                if (IsInTray())
+                    ShowFromTray();
+                else
+                    WindowState = WindowState.Normal;
 
-            ListViewMenu.SelectedIndex = 0;
-            ScanWidget.IsAutotype = true;
+                ListViewMenu.SelectedIndex = 0;
+                ScanWidget.IsAutotype = true;
+            }
         }
 
         private void ShowMenuItem_Click(object sender, EventArgs e)
@@ -273,6 +276,7 @@ namespace QRCodeScannerGenerator
         {
             int index = ListViewMenu.SelectedIndex;
             MoveCursor(index);
+            ScanWidget.IsAutotype = false;
             switch (index)
             {
                 case 0:
