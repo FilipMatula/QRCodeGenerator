@@ -82,7 +82,7 @@ namespace QRCodeScannerGenerator
         private void UpdateSizeVisibility()
         {
             HeightColumn.Visibility = (BarcodeFormat)comboBox_Generate_Type.SelectedItem == BarcodeFormat.CODE_128 ? Visibility.Visible : Visibility.Hidden;
-            HeightColumnDefinition.Width = HeightColumn.IsVisible ? new GridLength(1, GridUnitType.Star) : new GridLength(0, GridUnitType.Pixel);
+            HeightColumnDefinition.Width = HeightColumn.Visibility == Visibility.Visible ? new GridLength(1, GridUnitType.Star) : new GridLength(0, GridUnitType.Pixel);
         }
 
         // Generate Code
@@ -92,14 +92,23 @@ namespace QRCodeScannerGenerator
             {
                 BarcodeFormat format = (BarcodeFormat)comboBox_Generate_Type.SelectedItem;
                 BarcodeWriter barcodeWriter = new BarcodeWriter();
-                QrCodeEncodingOptions options = new QrCodeEncodingOptions
+                if ((BarcodeFormat)comboBox_Generate_Type.SelectedItem == BarcodeFormat.QR_CODE)
                 {
-                    DisableECI = true,
-                    CharacterSet = "UTF-8",
-                    Width = CodeWidth,
-                    Height = (BarcodeFormat)comboBox_Generate_Type.SelectedItem == BarcodeFormat.CODE_128 ? CodeHeight : CodeWidth,
-                };
-                barcodeWriter.Options = options;
+                    QrCodeEncodingOptions options = new QrCodeEncodingOptions
+                    {
+                        DisableECI = true,
+                        CharacterSet = "UTF-8",
+                        Width = CodeWidth,
+                        Height = CodeWidth,
+                    };
+                    barcodeWriter.Options = options;
+                }
+                else
+                {
+                    barcodeWriter.Options.Width = CodeWidth;
+                    barcodeWriter.Options.Height = format == BarcodeFormat.CODE_128 ? CodeHeight : CodeWidth;
+                }
+                
                 barcodeWriter.Format = (BarcodeFormat)comboBox_Generate_Type.SelectedItem;
                 var result = new Bitmap(barcodeWriter.Write(Text_Generate.Text.Trim()));
                 pictureBoxGenerate.Image = result;
