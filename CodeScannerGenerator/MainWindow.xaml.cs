@@ -35,6 +35,8 @@ namespace CodeScannerGenerator
         int AutotypeHotkeyId;
         #endregion
 
+        bool AutostartMinimized { get { return (bool)Application.Current.Properties["Start_Minimized"]; } }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -49,6 +51,7 @@ namespace CodeScannerGenerator
             Activated += MainWindow_Activated;
             StateChanged += MainWindow_StateChanged;
             IsVisibleChanged += MainWindow_IsVisibleChanged;
+            SourceInitialized += MainWindow_SourceInitialized;
             ScanWidget.URLOpened += openURL;
             ScanWidget.Autotyped += ScanWidget_Autotyped;
             SettingsWidget.HotkeyChanged += SettingsWidget_HotkeyChanged;
@@ -65,8 +68,14 @@ namespace CodeScannerGenerator
             // Initialize tray
             InitializeTray();
 
-            if ((bool)Application.Current.Properties["Start_Minimized"] == true)
+            if (AutostartMinimized == true)
                 WindowState = WindowState.Minimized;
+        }
+
+        private void MainWindow_SourceInitialized(object sender, EventArgs e)
+        {
+            if (AutostartMinimized == true)
+                ShowInTaskbar = false;
         }
 
         private void SettingsWidget_HotkeyChanged()
@@ -77,7 +86,7 @@ namespace CodeScannerGenerator
 
         private void ScanWidget_Autotyped(string obj)
         {
-            HideToTray();
+            HideToTray(false);
             Autotype(obj);
         }
 
@@ -108,8 +117,8 @@ namespace CodeScannerGenerator
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.BalloonTipText = "The app has been minimised. Double click the tray icon to show.";
-            notifyIcon.BalloonTipTitle = "QR Code Scanner";
-            notifyIcon.Text = "QR Code Scanner";
+            notifyIcon.BalloonTipTitle = "Code Scanner & Generator";
+            notifyIcon.Text = "Code Scanner & Generator";
             notifyIcon.Icon = new Icon(Application.GetResourceStream(new Uri("pack://application:,,,/images/qrcode.ico")).Stream);
             notifyIcon.DoubleClick += NotifyIcon_DoubleClick;           
             notifyIcon.ContextMenu = createTrayMenu();
@@ -170,10 +179,10 @@ namespace CodeScannerGenerator
             Application.Current.Shutdown();
         }
 
-        public void HideToTray()
+        public void HideToTray(bool showBalloonTip = true)
         {
             Hide();
-            if (notifyIcon != null)
+            if (notifyIcon != null && showBalloonTip)
                 notifyIcon.ShowBalloonTip(2000);
         }
 
@@ -181,6 +190,12 @@ namespace CodeScannerGenerator
         {
             Show();
             WindowState = storedWindowState;
+
+            if (showNoDeviceError)
+            {
+                MessageBox.Show(LocUtil.TranslatedString("NoDeviceMessage", this), LocUtil.TranslatedString("NoDeviceTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
+                showNoDeviceError = false;
+            }
         }
 
         private bool IsInTray()
@@ -231,6 +246,9 @@ namespace CodeScannerGenerator
         // Timer for signal reveiving about new devices
         private void ScanDevices_Tick(object sender, EventArgs e)
         {
+            if (IsInTray())
+                return;
+
             long currentMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
             if ((currentMilliseconds - millisecondsFromLastScan) < 3000)
@@ -326,9 +344,12 @@ namespace CodeScannerGenerator
         // On content renderered show initialization errors
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            if (showNoDeviceError)
+            if (showNoDeviceError && !IsInTray())
+            {
                 MessageBox.Show(LocUtil.TranslatedString("NoDeviceMessage", this), LocUtil.TranslatedString("NoDeviceTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
-
+                showNoDeviceError = false;
+            }
+   
             startUp = false;
         }
 
@@ -374,6 +395,12 @@ namespace CodeScannerGenerator
         // Initialize program after UI ready
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            if (AutostartMinimized == true)
+            {
+                HideToTray(false);
+                ShowInTaskbar = true;
+            }
+
             LoadDevices();
 
             // Initialize comboboxs
@@ -381,9 +408,6 @@ namespace CodeScannerGenerator
 
             // Initialize checkboxes
             InitializeCheckboxes();
-
-            if ((bool)Application.Current.Properties["Start_Minimized"] == true)
-                HideToTray();
         }
 
         // Activate devices plug and unplug signals

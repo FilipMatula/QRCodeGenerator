@@ -149,6 +149,7 @@ namespace CodeScannerGenerator
             if (result != null && !blockScanning)
             {
                 stopCameraStream();
+                blockScanning = true;
                 string scannedText = result.ToString();
                 Text_Scan.Text = scannedText;
                 saveInClipboard(scannedText);
@@ -190,7 +191,6 @@ namespace CodeScannerGenerator
                     }
                 }
 
-                blockScanning = true;
                 startCameraStream();
             }
         }
