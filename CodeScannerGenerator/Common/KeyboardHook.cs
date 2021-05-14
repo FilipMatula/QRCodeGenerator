@@ -102,7 +102,8 @@ namespace CodeScannerGenerator.Common
             _currentId = _currentId + 1;
 
             // register the hot key.
-            RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key);
+            if (modifier != ModifierKeys.None && key != Keys.None)
+                RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key);
 
             return _currentId;
         }

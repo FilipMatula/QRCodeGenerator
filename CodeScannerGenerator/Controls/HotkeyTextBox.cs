@@ -23,7 +23,7 @@ namespace CodeScannerGenerator.Controls
         {
             if (sender is HotkeyTextBox control)
             {
-                control.Text = control.Hotkey.ToString();
+                 control.Text = control.Hotkey.ToString();
             }
         }
 
@@ -32,6 +32,8 @@ namespace CodeScannerGenerator.Controls
             get => (Hotkey)GetValue(HotKeyProperty);
             set => SetValue(HotKeyProperty, value);
         }
+
+        private string textBackup;
 
         public HotkeyTextBox()
         {
@@ -53,6 +55,19 @@ namespace CodeScannerGenerator.Controls
                 Key.OemMinus, Key.DeadCharProcessed, Key.Oem1, Key.Oem5, Key.Oem7, Key.OemPeriod, Key.OemComma, Key.Add,
                 Key.Divide, Key.Multiply, Key.Subtract, Key.Oem102, Key.Decimal);
 
+        private void ClearFocus()
+        {
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), null);
+            Keyboard.ClearFocus();
+        }
+
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            e.Handled = true;
+            textBackup = Text;
+            Text = "< Type hotkey (ESC to cancel, DEL or Backspace to remove) >";
+        }
+
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             e.Handled = true;
@@ -69,10 +84,18 @@ namespace CodeScannerGenerator.Controls
             if (key == Key.System)
                 key = e.SystemKey;
 
+            if (key.IsEither(Key.Escape) && modifiers == ModifierKeys.None)
+            {
+                Text = textBackup;
+                ClearFocus();
+                return;
+            }
+
             // If Delete/Backspace/Escape is pressed without modifiers - clear current value and return
-            if (key.IsEither(Key.Delete, Key.Back, Key.Escape) && modifiers == ModifierKeys.None)
+            if (key.IsEither(Key.Delete, Key.Back) && modifiers == ModifierKeys.None)
             {
                 Hotkey = new Hotkey();
+                ClearFocus();
                 return;
             }
 
@@ -94,6 +117,7 @@ namespace CodeScannerGenerator.Controls
             // Set value
             Hotkey = new Hotkey((System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(key), Common.KeyboardHook.convertFromWPF(modifiers));
             hotkeyChanged?.Invoke(Hotkey.ToString());
+            ClearFocus();
         }
     }
 }
