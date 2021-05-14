@@ -101,6 +101,9 @@
       <DependentUpon>GenerateWidget.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Hotkey.cs" />
+    <Compile Include="MultipleScanWindow.xaml.cs">
+      <DependentUpon>MultipleScanWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScanWidget.xaml.cs">
       <DependentUpon>ScanWidget.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Page Include="GenerateWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MultipleScanWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

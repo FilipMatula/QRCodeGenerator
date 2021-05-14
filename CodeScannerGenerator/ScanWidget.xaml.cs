@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -104,7 +105,11 @@ namespace CodeScannerGenerator
         private void CaptureDevice_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
             VideoPreviewWidget.SetImage((Bitmap)eventArgs.Frame.Clone());
-            blockScanning = false;
+            if (blockScanning)
+            {
+                Thread.Sleep(200);
+                blockScanning = false;
+            }
         }
 
         // Open url when open button clicked
@@ -141,57 +146,82 @@ namespace CodeScannerGenerator
             reader.TryInverted = true;
             reader.Options = new DecodingOptions
             {
-                PossibleFormats = comboBox_Scan_Type.SelectedIndex == 0 ? Constants.PossibleFormats : new List<BarcodeFormat>() { (BarcodeFormat)comboBox_Scan_Type.SelectedItem }
+                PossibleFormats = comboBox_Scan_Type.SelectedIndex == 0 ? Constants.PossibleFormats : new List<BarcodeFormat>() { (BarcodeFormat)comboBox_Scan_Type.SelectedItem },
+                TryHarder = true
             };
 
-            var result = reader.Decode(bitmap);
-            //Result [] result = reader.DecodeMultiple(bitmap);
-            if (result != null && !blockScanning)
+            Result[] results = reader.DecodeMultiple(bitmap);
+            if (results != null && results.Length > 0 && !blockScanning)
             {
                 stopCameraStream();
                 blockScanning = true;
-                string scannedText = result.ToString();
-                Text_Scan.Text = scannedText;
-                saveInClipboard(scannedText);
 
-                string text = LocUtil.TranslatedString("QRCodeScannedMessage", this) + " " + scannedText + ".\n" + "Text was copied to clipboard.";
-
-                if (IsAutotype)
+                if (results.Length == 1)
                 {
-                    text += "\n" + LocUtil.TranslatedString("Do you want to autofill field with this text?", this);
-                    MessageBoxResult messageBoxResult = MessageBox.Show(text,
-                                              LocUtil.TranslatedString("QRCodeScannedTitle", this),
-                                              MessageBoxButton.YesNo,
-                                              MessageBoxImage.Question);
-                    if (messageBoxResult == MessageBoxResult.Yes)
-                    {
-                        Autotyped?.Invoke(scannedText);
-                    }
-                    IsAutotype = false;
-                }
-                else
-                {
-                    Uri uriResult;
-                    bool UriParseResult = Uri.TryCreate(scannedText, UriKind.Absolute, out uriResult)
-                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                    string scannedText = results[0].ToString();
+                    Text_Scan.Text = scannedText;
+                    saveInClipboard(scannedText);
 
-                    if (UriParseResult)
+                    if (IsAutotype)
                     {
-                        text += "\n" + LocUtil.TranslatedString("QRCodeScannedMessage2", this);
+                        string text = "Scanned text:" + " \"" + scannedText + "\".\n\n" + "Text was copied to clipboard.\n\n" + "Do you want to autofill field with this text?";
                         MessageBoxResult messageBoxResult = MessageBox.Show(text,
-                                                  LocUtil.TranslatedString("QRCodeScannedTitle", this),
+                                                  "Autofill with scanned text",
                                                   MessageBoxButton.YesNo,
                                                   MessageBoxImage.Question);
                         if (messageBoxResult == MessageBoxResult.Yes)
-                            URLOpened?.Invoke(scannedText);
+                        {
+                            Autotyped?.Invoke(scannedText);
+                            IsAutotype = false;
+                        }
                     }
                     else
                     {
-                        MessageBox.Show(text, LocUtil.TranslatedString("QRCodeScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Information);
+                        ShowScannedCodeInfo(scannedText);
+                    }
+                }
+                else
+                {
+                    MultipleScanWindow msw = new MultipleScanWindow(results);
+                    msw.ShowDialog();
+                    if (msw.Result != null)
+                    {
+                        if (IsAutotype)
+                        {
+                            Autotyped?.Invoke(msw.Result.Text);
+                            IsAutotype = false;
+                        }
+                        else
+                        {
+                            ShowScannedCodeInfo(msw.Result.Text);
+                        }
                     }
                 }
 
                 startCameraStream();
+            }
+        }
+
+        private void ShowScannedCodeInfo(string code)
+        {
+            string text = "Scanned text:" + " \"" + code + "\".\n\n" + "Text was copied to clipboard.";
+            Uri uriResult;
+            bool UriParseResult = Uri.TryCreate(code, UriKind.Absolute, out uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
+            if (UriParseResult)
+            {
+                text += "\n\n" + LocUtil.TranslatedString("QRCodeScannedMessage2", this);
+                MessageBoxResult messageBoxResult = MessageBox.Show(text,
+                                          LocUtil.TranslatedString("QRCodeScannedTitle", this),
+                                          MessageBoxButton.YesNo,
+                                          MessageBoxImage.Question);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                    URLOpened?.Invoke(code);
+            }
+            else
+            {
+                MessageBox.Show(text, LocUtil.TranslatedString("QRCodeScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -252,6 +282,11 @@ namespace CodeScannerGenerator
         private void Autofocus()
         {
             _ = Task.Run(() => CameraControl.autoFocus(captureDevice, CurrectDevice));
+        }
+
+        private void ButtonCopy_Click(object sender, RoutedEventArgs e)
+        {
+            saveInClipboard(Text_Scan.Text);
         }
     }
 }
