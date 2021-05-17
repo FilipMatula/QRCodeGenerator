@@ -155,7 +155,7 @@ namespace CodeScannerGenerator
         {
             if (e.Key == SettingsWidget.AutotypeHotkey.Key && e.Modifier == SettingsWidget.AutotypeHotkey.Modifiers)
             {
-                if (WindowState != WindowState.Minimized)
+                if (WindowState != WindowState.Minimized && IsActive)
                     return;
 
                 if (IsInTray())
@@ -163,6 +163,7 @@ namespace CodeScannerGenerator
                 else
                     WindowState = WindowState.Normal;
 
+                Activate();
                 ListViewMenu.SelectedIndex = 0;
                 ScanWidget.IsAutotype = true;
             }

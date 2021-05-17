@@ -183,6 +183,7 @@ namespace CodeScannerGenerator
                 else
                 {
                     MultipleScanWindow msw = new MultipleScanWindow(results);
+                    msw.Owner = Application.Current.MainWindow;
                     msw.ShowDialog();
                     if (msw.Result != null)
                     {
