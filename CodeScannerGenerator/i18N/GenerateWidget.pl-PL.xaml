@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
+    
+    <!--Generate card-->
+    <sys:String x:Key="Type">Typ:</sys:String>
+    <sys:String x:Key="Width">Szerokość:</sys:String>
+    <sys:String x:Key="Height">Wysokość:</sys:String>
+    <sys:String x:Key="Text">Tekst:</sys:String>
+    <sys:String x:Key="Save">Zapisz</sys:String>
+
+    <!--Popups-->
+    <sys:String x:Key="EmptyTextTitle">Brak tekstu do wygenerowania kodu</sys:String>
+    <sys:String x:Key="EmptyTextMessage">Brak tekstu, z którego generuje się kod. Wpisz coś i spróbuj ponownie.</sys:String>
+    <sys:String x:Key="NoGeneratedTitle">Nie wygenerowano kodu</sys:String>
+    <sys:String x:Key="NoGeneratedMessage">Nie został wygenerowany żaden kod. Wygeneruj go najpierw.</sys:String>
+</ResourceDictionary>

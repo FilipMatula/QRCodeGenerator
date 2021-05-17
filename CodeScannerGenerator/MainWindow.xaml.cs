@@ -116,9 +116,9 @@ namespace CodeScannerGenerator
         private void InitializeTray()
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.BalloonTipText = "The app has been minimised. Double click the tray icon to show.";
-            notifyIcon.BalloonTipTitle = "Code Scanner & Generator";
-            notifyIcon.Text = "Code Scanner & Generator";
+            notifyIcon.BalloonTipText = LocUtil.TranslatedString("BalloonTipText", this);
+            notifyIcon.BalloonTipTitle = LocUtil.TranslatedString("BalloonTipTittle", this);
+            notifyIcon.Text = LocUtil.TranslatedString("BalloonTipTittle", this);
             notifyIcon.Icon = new Icon(Application.GetResourceStream(new Uri("pack://application:,,,/images/qrcode.ico")).Stream);
             notifyIcon.DoubleClick += NotifyIcon_DoubleClick;           
             notifyIcon.ContextMenu = createTrayMenu();
@@ -128,10 +128,10 @@ namespace CodeScannerGenerator
         {
             System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
             System.Windows.Forms.MenuItem exitMenuItem = new System.Windows.Forms.MenuItem();
-            exitMenuItem.Text = "Exit";
+            exitMenuItem.Text = LocUtil.TranslatedString("Exit", this);
             exitMenuItem.Click += ExitMenuItem_Click;
             System.Windows.Forms.MenuItem showMenuItem = new System.Windows.Forms.MenuItem();
-            showMenuItem.Text = "Show";
+            showMenuItem.Text = LocUtil.TranslatedString("Show", this);
             showMenuItem.Click += ShowMenuItem_Click;
             contextMenu.MenuItems.Add(showMenuItem);
             contextMenu.MenuItems.Add("-");
@@ -442,17 +442,33 @@ namespace CodeScannerGenerator
             OnLanguageChanged(LocUtil.GetCurrentCultureName(this));
         }
 
+        private void Button_PolandLanguage_Click(object sender, RoutedEventArgs e)
+        {
+            LocUtil.SwitchLanguage(this, "pl-PL");
+            OnLanguageChanged(LocUtil.GetCurrentCultureName(this));
+        }
+
         private void OnLanguageChanged(string key)
         {
+            ScanWidget.SwitchLanguage(key);
+            GenerateWidget.SwitchLanguage(key);
+            SettingsWidget.SwitchLanguage(key);
             switch (key)
             {
                 case "en-US":
                     Button_GermanLanguage.Opacity = 0.5;
                     Button_EnglishLanguage.Opacity = 1;
+                    Button_PolandLanguage.Opacity = 0.5;
                     break;
                 case "de-DE":
                     Button_GermanLanguage.Opacity = 1;
                     Button_EnglishLanguage.Opacity = 0.5;
+                    Button_PolandLanguage.Opacity = 0.5;
+                    break;
+                case "pl-PL":
+                    Button_GermanLanguage.Opacity = 0.5;
+                    Button_EnglishLanguage.Opacity = 0.5;
+                    Button_PolandLanguage.Opacity = 1;
                     break;
                 default:
                     break;

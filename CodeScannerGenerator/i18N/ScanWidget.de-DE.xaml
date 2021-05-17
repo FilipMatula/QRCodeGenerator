@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
+
+    <!--Scan card-->
+    <sys:String x:Key="Camera">Kamera:</sys:String>
+    <sys:String x:Key="Type">Typ:</sys:String>
+    <sys:String x:Key="LastScannedText">Zuletzt gescannter Text:</sys:String>
+    <sys:String x:Key="OpenURL">URL öffnen</sys:String>
+    <sys:String x:Key="Copy">Kopieren</sys:String>
+    <sys:String x:Key="Auto">Automatische Erkennung</sys:String>
+
+    <!--Popups-->
+    <sys:String x:Key="NoScannedTitle">Kein Text eingescannt</sys:String>
+    <sys:String x:Key="NoScannedMessage">Es ist kein gescannter Code-Text vorhanden. Bitte scannen Sie ihn zuerst und versuchen Sie es erneut.</sys:String>
+    <sys:String x:Key="IncorrectURITitle">Fehlerhaftes URI-Format</sys:String>
+    <sys:String x:Key="IncorrectURIMessage">Der gescannte Code-Text ist nicht das richtige URI-Format.</sys:String>
+    <sys:String x:Key="CodeScannedTitle">Automatisches Ausfüllen mit gescanntem Code</sys:String>
+    <sys:String x:Key="CodeScannedTitle2">Code gescannt</sys:String>
+    <sys:String x:Key="CodeScannedMessage1">Gescannter Text:</sys:String>
+    <sys:String x:Key="CodeScannedMessage2">Der Text wurde in die Zwischenablage kopiert.</sys:String>
+    <sys:String x:Key="CodeScannedMessage3">Möchten Sie das Feld mit diesem Text automatisch ausfüllen?</sys:String>
+    <sys:String x:Key="CodeScannedMessage4">Möchten Sie es im Browser öffnen?</sys:String>
+</ResourceDictionary>

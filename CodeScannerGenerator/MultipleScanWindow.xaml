@@ -21,13 +21,13 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Label Focusable="False" Grid.Column="0" Grid.Row="0"  Margin="20 20 20 10" Content="The following codes have been scanned. Please select the entry you want to continue with." HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Focusable="False" Grid.Column="0" Grid.Row="0"  Margin="20 20 20 10" Content="{DynamicResource ResourceKey=TitleText}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Border Focusable="False" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" Margin="20 0 20 10" Background="White" >
             <ListView x:Name="Scan_ListView" SelectionMode="Single">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="Auto"  Header="Format" DisplayMemberBinding="{Binding Format}" />
-                        <GridViewColumn Header="Text" DisplayMemberBinding="{Binding Text}" />
+                        <GridViewColumn Width="Auto"  Header="{DynamicResource ResourceKey=Format}" DisplayMemberBinding="{Binding Format}" />
+                        <GridViewColumn Header="{DynamicResource ResourceKey=Text}" DisplayMemberBinding="{Binding Text}" />
                     </GridView>
                 </ListView.View>
             </ListView>

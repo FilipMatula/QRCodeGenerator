@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeScannerGenerator.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,9 +23,13 @@ namespace CodeScannerGenerator
     {
         private Result[] results;
         public ScanResult Result { get; set; } = null;
-        public MultipleScanWindow(Result[] results)
+        public MultipleScanWindow(Result[] results, string culture)
         {
             InitializeComponent();
+
+            // Language initialization
+            LocUtil.SwitchLanguage(this, culture);
+
             this.results = results;
             Scan_ListView.ItemsSource = LoadCollectionData();
             Scan_ListView.KeyDown += Scan_ListView_KeyDown;

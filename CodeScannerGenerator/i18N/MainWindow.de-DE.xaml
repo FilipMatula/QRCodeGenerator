@@ -9,35 +9,15 @@
     <sys:String x:Key="Generate">Generieren</sys:String>
     <sys:String x:Key="Settings">Einstellungen</sys:String>
 
-    <!--Scan card-->
-    <sys:String x:Key="Camera">Kamera:</sys:String>
-    <sys:String x:Key="Type">Typ:</sys:String>
-    <sys:String x:Key="LastScannedText">Zuletzt gescannter Text:</sys:String>
-    <sys:String x:Key="OpenURL">URL öffnen</sys:String>
-    <sys:String x:Key="Auto">Automatische Erkennung</sys:String>
+    <!-- Tray -->
+    <sys:String x:Key="BalloonTipText">Die App wurde minimiert. Doppelklicken Sie auf das Tray-Symbol, um es anzuzeigen.</sys:String>
+    <sys:String x:Key="BalloonTipTittle">Codescanner und Generator</sys:String>
+    <sys:String x:Key="Exit">Ausgang</sys:String>
+    <sys:String x:Key="Show">Show</sys:String>
 
-    <!--Generate card-->
-    <sys:String x:Key="Text">Text:</sys:String>
-    <sys:String x:Key="Save">Speichern</sys:String>
-
-    <!--Settings card-->
-    <sys:String x:Key="Browser">Internet-Browser:</sys:String>
-
-    <!--Popups-->
-    <sys:String x:Key="NoQRScannedTitle">Kein QR-Text eingescannt</sys:String>
-    <sys:String x:Key="NoQRScannedMessage">Es ist kein gescannter QR-Code-Text vorhanden. Bitte scannen Sie ihn zuerst und versuchen Sie es erneut.</sys:String>
-    <sys:String x:Key="IncorrectURITitle">Fehlerhaftes URI-Format</sys:String>
-    <sys:String x:Key="IncorrectURIMessage">Der gescannte QR-Code-Text ist nicht das richtige URI-Format.</sys:String>
-    <sys:String x:Key="QRCodeScannedTitle">QRCode eingescannt</sys:String>
-    <sys:String x:Key="QRCodeScannedMessage">Eingescannter QRCode-Text:</sys:String>
-    <sys:String x:Key="QRCodeScannedMessage2">Möchten Sie es im Browser öffnen?</sys:String>
-    <sys:String x:Key="EmptyTextTitle">Kein Text zum Erzeugen des QR-Codes</sys:String>
-    <sys:String x:Key="EmptyTextMessage">Es ist kein Text vorhanden, aus dem ein QR-Code generiert werden kann. Bitte geben Sie etwas ein und versuchen.</sys:String>
-    <sys:String x:Key="NoGeneratedTitle">Kein QR-Code generiert</sys:String>
-    <sys:String x:Key="NoGeneratedMessage">Es ist kein QR-Code generiert. Bitte generieren Sie ihn zuerst.</sys:String>
+    <!--Popuops-->
     <sys:String x:Key="NoDeviceTitle">Kein Gerät vorhanden</sys:String>
     <sys:String x:Key="NoDeviceMessage">Es ist kein Videogerät vorhanden. Bitte schließen Sie das Videogerät an.</sys:String>
     <sys:String x:Key="DeviceChangedTitle">Videogerät gewechselt</sys:String>
     <sys:String x:Key="DeviceChangedMessage">Das Videogerät wurde angeschlossen oder getrennt. Das Programm aktualisiert die verfügbaren Geräte.</sys:String>
-
 </ResourceDictionary>

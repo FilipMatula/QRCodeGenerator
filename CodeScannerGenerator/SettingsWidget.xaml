@@ -9,32 +9,53 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="WhiteSmoke">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="5*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition  Height="40" />
-            <RowDefinition  Height="40" />
-            <RowDefinition  Height="40" />
-            <RowDefinition  Height="40" />
-            <RowDefinition  Height="40" />
-            <RowDefinition/>
-        </Grid.RowDefinitions>
 
-        <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="Hide to tray on minimize" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
-        <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="Hide to tray on close" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBox_Autostart" Margin="10 0" Content="Run application on Windows startup" Click="checkBox_Autostart_Click"></CheckBox>
-        <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBox_Autostart_minimized" Margin="25 0" Content="Run minimized on Windows startup" Click="checkBox_Autostart_minimized_Click"></CheckBox>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="40" />
+            </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
-            <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="55" Content="{DynamicResource ResourceKey=Browser}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <ComboBox Grid.Column="1" Grid.Row="0" Margin="75 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" x:Name="comboBox_Browsers" SelectionChanged="comboBox_Browsers_SelectionChanged"/>
+            <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Content="{DynamicResource ResourceKey=Browser}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="1" Grid.Row="0" Margin="0 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" x:Name="comboBox_Browsers" SelectionChanged="comboBox_Browsers_SelectionChanged"/>
+            </Grid>
+
+            <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Content="{DynamicResource ResourceKey=AutotypeHotkey}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <controls:HotkeyTextBox x:Name="Hotkey_Autotype" Margin="0 0 10 0" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Hotkey="{Binding AutotypeHotkey, Mode=TwoWay}" Style="{DynamicResource MaterialDesignTextBox}" hotkeyChanged="Hotkey_Autotype_hotkeyChanged"></controls:HotkeyTextBox>
+            </Grid>
         </Grid>
 
-        <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
-            <Label Grid.Column="0" Grid.Row="0" Margin="10 0" Width="105" Content="Autotype hotkey:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <controls:HotkeyTextBox x:Name="Hotkey_Autotype" Grid.Column="1" Grid.Row="0" Margin="110 0 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Hotkey="{Binding AutotypeHotkey, Mode=TwoWay}" Style="{DynamicResource MaterialDesignTextBox}" hotkeyChanged="Hotkey_Autotype_hotkeyChanged"></controls:HotkeyTextBox>
+        <Grid Margin="0 40 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="40" />
+                <RowDefinition  Height="40" />
+                <RowDefinition  Height="40" />
+                <RowDefinition  Height="40" />
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="{DynamicResource ResourceKey=HideToTrayOnMinimise}" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="{DynamicResource ResourceKey=HideToTrayOnClose}" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
+            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBox_Autostart" Margin="10 0" Content="{DynamicResource ResourceKey=RunOnStartup}" Click="checkBox_Autostart_Click"></CheckBox>
+            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBox_Autostart_minimized" Margin="25 0" Content="{DynamicResource ResourceKey=RunMinimisedOnStartup}" Click="checkBox_Autostart_minimized_Click"></CheckBox>
         </Grid>
     </Grid>
 </UserControl>

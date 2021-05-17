@@ -9,35 +9,15 @@
     <sys:String x:Key="Generate">Generate</sys:String>
     <sys:String x:Key="Settings">Settings</sys:String>
 
-    <!--Scan card-->
-    <sys:String x:Key="Camera">Camera:</sys:String>
-    <sys:String x:Key="Type">Type:</sys:String>
-    <sys:String x:Key="LastScannedText">Last scanned text:</sys:String>
-    <sys:String x:Key="OpenURL">Open URL</sys:String>
-    <sys:String x:Key="Auto">Auto detect</sys:String>
-
-    <!--Generate card-->
-    <sys:String x:Key="Text">Text:</sys:String>
-    <sys:String x:Key="Save">Save</sys:String>
-
-    <!--Settings card-->
-    <sys:String x:Key="Browser">Browser:</sys:String>
+    <!-- Tray -->
+    <sys:String x:Key="BalloonTipText">The app has been minimised. Double click the tray icon to show.</sys:String>
+    <sys:String x:Key="BalloonTipTittle">Code Scanner and Generator</sys:String>
+    <sys:String x:Key="Exit">Exit</sys:String>
+    <sys:String x:Key="Show">Show</sys:String>
     
-    <!--Popups-->
-    <sys:String x:Key="NoQRScannedTitle">No QR text scanned</sys:String>
-    <sys:String x:Key="NoQRScannedMessage">There is no scanned QR Code text. Please scan it first and try again.</sys:String>
-    <sys:String x:Key="IncorrectURITitle">Incorrect URI format</sys:String>
-    <sys:String x:Key="IncorrectURIMessage">Scanned QR Code text is not URI valid format.</sys:String>
-    <sys:String x:Key="QRCodeScannedTitle">QRCode scanned</sys:String>
-    <sys:String x:Key="QRCodeScannedMessage">Scanned QRCode text: </sys:String>
-    <sys:String x:Key="QRCodeScannedMessage2">Do you want to open it in browser?</sys:String>
-    <sys:String x:Key="EmptyTextTitle">No text to generate QR Code</sys:String>
-    <sys:String x:Key="EmptyTextMessage">There is no text from which generate QR Code. Please type something and try again.</sys:String>
-    <sys:String x:Key="NoGeneratedTitle">No QR code generated</sys:String>
-    <sys:String x:Key="NoGeneratedMessage">There is no QR code generated. Please generate it first.</sys:String>
+    <!--Popuops-->
     <sys:String x:Key="NoDeviceTitle">No device available</sys:String>
     <sys:String x:Key="NoDeviceMessage">There is no video device available. Please plug video device.</sys:String>
     <sys:String x:Key="DeviceChangedTitle">Video device changed</sys:String>
     <sys:String x:Key="DeviceChangedMessage">Video device connected or disconnected. Program will refresh available devices.</sys:String>
-
 </ResourceDictionary>

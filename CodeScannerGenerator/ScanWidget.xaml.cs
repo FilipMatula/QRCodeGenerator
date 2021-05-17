@@ -34,8 +34,24 @@ namespace CodeScannerGenerator
         {
             InitializeComponent();
 
+            // Language initialization
+            LocUtil.SetDefaultLanguage(this);
+
             IsVisibleChanged += ScanWidget_IsVisibleChanged;
             VideoPreviewWidget.Autofocused += Autofocus;
+        }
+
+        public void SwitchLanguage(string culture)
+        {
+            LocUtil.SwitchLanguage(this, culture);
+            if (comboBox_Scan_Type.Items.Count > 0)
+            {
+                int selectedIndex = comboBox_Scan_Type.SelectedIndex;
+                comboBox_Scan_Type.Items.RemoveAt(0);
+                comboBox_Scan_Type.Items.Insert(0, LocUtil.TranslatedString("Auto", this));
+                comboBox_Scan_Type.Items.Refresh();
+                comboBox_Scan_Type.SelectedIndex = selectedIndex;
+            }
         }
 
         public void stopCameraStream()
@@ -50,15 +66,18 @@ namespace CodeScannerGenerator
 
         private void comboBox_Scan_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (comboBox_Scan_Type.SelectedIndex != 0 && (BarcodeFormat)comboBox_Scan_Type.SelectedItem == BarcodeFormat.CODE_128)
-                VideoPreviewWidget.LowerRectangle = true;
-            else
-                VideoPreviewWidget.LowerRectangle = false;
+            if (comboBox_Scan_Type.SelectedItem != null)
+            {
+                if (comboBox_Scan_Type.SelectedIndex != 0 && (BarcodeFormat)comboBox_Scan_Type.SelectedItem == BarcodeFormat.CODE_128)
+                    VideoPreviewWidget.LowerRectangle = true;
+                else
+                    VideoPreviewWidget.LowerRectangle = false;
 
-            Properties.Settings.Default.Scan_code = comboBox_Scan_Type.SelectedItem.ToString();
-            Properties.Settings.Default.Save();
+                Properties.Settings.Default.Scan_code = comboBox_Scan_Type.SelectedItem.ToString();
+                Properties.Settings.Default.Save();
 
-            VideoPreviewWidget.Update();
+                VideoPreviewWidget.Update();
+            }
         }
 
         private void ScanWidget_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -126,7 +145,7 @@ namespace CodeScannerGenerator
                     MessageBox.Show(LocUtil.TranslatedString("IncorrectURIMessage", this), LocUtil.TranslatedString("IncorrectURITitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
-                MessageBox.Show(LocUtil.TranslatedString("NoQRScannedMessage", this), LocUtil.TranslatedString("NoQRScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(LocUtil.TranslatedString("NoScannedMessage", this), LocUtil.TranslatedString("NoScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         // Try read qr code every second
@@ -164,9 +183,9 @@ namespace CodeScannerGenerator
 
                     if (IsAutotype)
                     {
-                        string text = "Scanned text:" + " \"" + scannedText + "\".\n\n" + "Text was copied to clipboard.\n\n" + "Do you want to autofill field with this text?";
+                        string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + scannedText + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
                         MessageBoxResult messageBoxResult = MessageBox.Show(text,
-                                                  "Autofill with scanned text",
+                                                  LocUtil.TranslatedString("CodeScannedTitle", this),
                                                   MessageBoxButton.YesNo,
                                                   MessageBoxImage.Question);
                         if (messageBoxResult == MessageBoxResult.Yes)
@@ -182,7 +201,7 @@ namespace CodeScannerGenerator
                 }
                 else
                 {
-                    MultipleScanWindow msw = new MultipleScanWindow(results);
+                    MultipleScanWindow msw = new MultipleScanWindow(results, LocUtil.GetCurrentCultureName(this));
                     msw.Owner = Application.Current.MainWindow;
                     msw.ShowDialog();
                     if (msw.Result != null)
@@ -205,16 +224,16 @@ namespace CodeScannerGenerator
 
         private void ShowScannedCodeInfo(string code)
         {
-            string text = "Scanned text:" + " \"" + code + "\".\n\n" + "Text was copied to clipboard.";
+            string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + code + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this);
             Uri uriResult;
             bool UriParseResult = Uri.TryCreate(code, UriKind.Absolute, out uriResult)
                 && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
             if (UriParseResult)
             {
-                text += "\n\n" + LocUtil.TranslatedString("QRCodeScannedMessage2", this);
+                text += "\n\n" + LocUtil.TranslatedString("CodeScannedMessage4", this);
                 MessageBoxResult messageBoxResult = MessageBox.Show(text,
-                                          LocUtil.TranslatedString("QRCodeScannedTitle", this),
+                                          LocUtil.TranslatedString("CodeScannedTitle2", this),
                                           MessageBoxButton.YesNo,
                                           MessageBoxImage.Question);
                 if (messageBoxResult == MessageBoxResult.Yes)
@@ -222,7 +241,7 @@ namespace CodeScannerGenerator
             }
             else
             {
-                MessageBox.Show(text, LocUtil.TranslatedString("QRCodeScannedTitle", this), MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(text, LocUtil.TranslatedString("CodeScannedTitle2", this), MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

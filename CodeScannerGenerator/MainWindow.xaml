@@ -42,15 +42,18 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
                 <Grid.Resources>
-                    <ImageBrush x:Key="AddButtonGermanImageBrush" ImageSource="/images/flag_germany.png" Stretch="UniformToFill"/>
+                    <ImageBrush x:Key="AddButtonDEImageBrush" ImageSource="/images/flag_germany.png" Stretch="UniformToFill"/>
                     <ImageBrush x:Key="AddButtonUKImageBrush" ImageSource="/images/flag_united_kingdom.png" Stretch="UniformToFill"/>
+                    <ImageBrush x:Key="AddButtonPLImageBrush" ImageSource="/images/flag_poland.png" Stretch="UniformToFill"/>
                 </Grid.Resources>
 
-                <Button Width="50" Grid.Column="0" HorizontalAlignment="Right" Margin="0 0 10 0" BorderThickness="0" Background="{StaticResource AddButtonGermanImageBrush}" x:Name="Button_GermanLanguage" Click="Button_GermanLanguage_Click"></Button>
-                <Button Width="50" Grid.Column="1" HorizontalAlignment="Left" Margin="10 0 0 0" BorderThickness="0" Background="{StaticResource AddButtonUKImageBrush}" x:Name="Button_EnglishLanguage" Click="Button_EnglishLanguage_Click"></Button>
+                <Button Width="50" Grid.Column="0" HorizontalAlignment="Right" Margin="0 0 -10 0" BorderThickness="0" Background="{StaticResource AddButtonDEImageBrush}" x:Name="Button_GermanLanguage" Click="Button_GermanLanguage_Click"></Button>
+                <Button Width="50" Grid.Column="1" HorizontalAlignment="Center" Margin="0 0 0 0" BorderThickness="0" Background="{StaticResource AddButtonUKImageBrush}" x:Name="Button_EnglishLanguage" Click="Button_EnglishLanguage_Click"></Button>
+                <Button Width="50" Grid.Column="2" HorizontalAlignment="Left" Margin="-10 0 0 0" BorderThickness="0" Background="{StaticResource AddButtonPLImageBrush}" x:Name="Button_PolandLanguage" Click="Button_PolandLanguage_Click"></Button>
             </Grid>
             
             <materialDesign:TransitioningContent x:Name="TransitionContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft,Duration=0:0:0.2}">

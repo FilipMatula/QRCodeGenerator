@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
+
+    <!--Main menu-->
+    <sys:String x:Key="Scan">Skanuj</sys:String>
+    <sys:String x:Key="Generate">Generuj</sys:String>
+    <sys:String x:Key="Settings">Ustawienia</sys:String>
+
+    <!-- Tray -->
+    <sys:String x:Key="BalloonTipText">Aplikacja została zminimalizowana. Kliknij dwa razy na ikonę w pasku zadań, aby pokazać okno aplikacji.</sys:String>
+    <sys:String x:Key="BalloonTipTittle">Skaner i generator kodów</sys:String>
+    <sys:String x:Key="Exit">Wyjdź</sys:String>
+    <sys:String x:Key="Show">Pokaż</sys:String>
+
+    <!--Popuops-->
+    <sys:String x:Key="NoDeviceTitle">Brak dostępnego urządzenia</sys:String>
+    <sys:String x:Key="NoDeviceMessage">Brak dostępnego urządzenia wideo. Podłącz urządzenie wideo.</sys:String>
+    <sys:String x:Key="DeviceChangedTitle">Urządzenie wideo zostało zmienione</sys:String>
+    <sys:String x:Key="DeviceChangedMessage">Urządzenie wideo podłączone lub odłączone. Program odświeży dostępne urządzenia.</sys:String>
+</ResourceDictionary>

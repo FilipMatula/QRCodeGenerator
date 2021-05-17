@@ -12,6 +12,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="i18N/MainWindow.en-US.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="i18N/ScanWidget.en-US.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="i18N/GenerateWidget.en-US.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="i18N/SettingsWidget.en-US.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="i18N/MultipleScanWindow.en-US.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

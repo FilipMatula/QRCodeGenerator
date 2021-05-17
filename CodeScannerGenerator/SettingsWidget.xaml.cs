@@ -27,8 +27,15 @@ namespace CodeScannerGenerator
         {
             DataContext = this;
             InitializeComponent();
+            // Language initialization
+            LocUtil.SetDefaultLanguage(this);
 
             InitializeTextboxes();
+        }
+
+        public void SwitchLanguage(string culture)
+        {
+            LocUtil.SwitchLanguage(this, culture);
         }
 
         public void InitializeComboboxes()
