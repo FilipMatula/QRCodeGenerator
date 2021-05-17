@@ -43,6 +43,21 @@ namespace CodeScannerGenerator.Common
             return captureDevice.VideoCapabilities.Last();
         }
 
+        public static List<int> getFocusValues(int min, int max, int step)
+        {
+            List<int> ret = new List<int>();
+            int size = 100;
+            int newStep = (max - min) / size;
+
+            for (int value = min; value <= max; value += newStep)
+                ret.Add(value);
+
+                if (step != newStep && ret.Last() != max)
+                    ret.Add(max);
+
+            return ret;
+        }
+
         // Autofocus method for camera
         public static void autoFocus(VideoCaptureDevice captureDevice, FilterInfo currectDevice)
         {
@@ -52,10 +67,11 @@ namespace CodeScannerGenerator.Common
                 CameraControlFlags flag;
                 captureDevice.GetCameraPropertyRange(CameraControlProperty.Focus, out minFocus, out maxFocus, out stepSize, out defaultValue, out flag);
 
-                for (int value = minFocus; value <= maxFocus; value += stepSize)
+                foreach(int value in getFocusValues(minFocus, maxFocus, stepSize))
                 {
                     captureDevice.SetCameraProperty(CameraControlProperty.Focus, value, CameraControlFlags.Manual);
                 }
+
                 captureDevice.SetCameraProperty(CameraControlProperty.Focus, defaultValue, flag);
             }
         }
