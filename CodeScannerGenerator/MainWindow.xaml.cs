@@ -450,6 +450,7 @@ namespace CodeScannerGenerator
 
         private void OnLanguageChanged(string key)
         {
+            InitializeTray();
             ScanWidget.SwitchLanguage(key);
             GenerateWidget.SwitchLanguage(key);
             SettingsWidget.SwitchLanguage(key);
