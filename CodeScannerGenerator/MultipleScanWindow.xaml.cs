@@ -34,6 +34,17 @@ namespace CodeScannerGenerator
             Scan_ListView.ItemsSource = LoadCollectionData();
             Scan_ListView.KeyDown += Scan_ListView_KeyDown;
             Scan_ListView.Loaded += Scan_ListView_Loaded;
+            Scan_ListView.PreviewMouseDoubleClick += Scan_ListView_PreviewMouseDoubleClick;
+        }
+
+        private void Scan_ListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).SelectedItem;
+            if (item != null)
+            {
+                Result = (ScanResult)Scan_ListView.SelectedItem;
+                Close();
+            }
         }
 
         private void Scan_ListView_Loaded(object sender, RoutedEventArgs e)
@@ -50,7 +61,7 @@ namespace CodeScannerGenerator
 
         private void Scan_ListView_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && Scan_ListView.SelectedItem != null)
             {
                 Result = (ScanResult)Scan_ListView.SelectedItem;
                 Close();
