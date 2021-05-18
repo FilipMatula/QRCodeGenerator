@@ -62,7 +62,9 @@ namespace CodeScannerGenerator
 
         public void startCameraStream()
         {
-            CameraControl.startCameraStream(ref captureDevice, CurrectDevice, scanCodeTimer);
+            MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+            if (!mainWindow.IsInTray())
+                CameraControl.startCameraStream(ref captureDevice, CurrectDevice, scanCodeTimer);
         }
 
         private void comboBox_Scan_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)

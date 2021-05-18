@@ -199,7 +199,7 @@ namespace CodeScannerGenerator
             }
         }
 
-        private bool IsInTray()
+        public bool IsInTray()
         {
             if (notifyIcon != null && notifyIcon.Visible)
                 return true;
