@@ -158,6 +158,9 @@ namespace CodeScannerGenerator
                 if (WindowState != WindowState.Minimized && IsActive)
                     return;
 
+                if (ScanWidget.FilterInfoCollection == null || ScanWidget.FilterInfoCollection.Count == 0)
+                    return;
+
                 if (IsInTray())
                     ShowFromTray();
                 else
