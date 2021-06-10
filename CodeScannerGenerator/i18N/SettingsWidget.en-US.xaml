@@ -11,4 +11,5 @@
     <sys:String x:Key="HideToTrayOnClose">Hide to tray on close</sys:String>
     <sys:String x:Key="RunOnStartup">Run application on Windows startup</sys:String>
     <sys:String x:Key="RunMinimisedOnStartup">Run minimized on Windows startup</sys:String>
+    <sys:String x:Key="AutotypeConfimation">Confirm autotype</sys:String>
 </ResourceDictionary>

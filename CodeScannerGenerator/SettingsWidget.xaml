@@ -49,13 +49,15 @@
                 <RowDefinition  Height="40" />
                 <RowDefinition  Height="40" />
                 <RowDefinition  Height="40" />
+                <RowDefinition  Height="40" />
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="{DynamicResource ResourceKey=HideToTrayOnMinimise}" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
-            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="{DynamicResource ResourceKey=HideToTrayOnClose}" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
-            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBox_Autostart" Margin="10 0" Content="{DynamicResource ResourceKey=RunOnStartup}" Click="checkBox_Autostart_Click"></CheckBox>
-            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBox_Autostart_minimized" Margin="25 0" Content="{DynamicResource ResourceKey=RunMinimisedOnStartup}" Click="checkBox_Autostart_minimized_Click"></CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBox_AutotypeConfirmation" Margin="10 0" Content="{DynamicResource ResourceKey=AutotypeConfimation}" Click="checkBox_AutotypeConfirmation_Click"></CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBox_HideToTrayOnMinimize" Margin="10 0" Content="{DynamicResource ResourceKey=HideToTrayOnMinimise}" Click="checkBox_HideToTrayOnMinimize_Click"></CheckBox>
+            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBox_HideToTrayOnClose" Margin="10 0" Content="{DynamicResource ResourceKey=HideToTrayOnClose}" Click="checkBox_HideToTrayOnClose_Click"></CheckBox>
+            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBox_Autostart" Margin="10 0" Content="{DynamicResource ResourceKey=RunOnStartup}" Click="checkBox_Autostart_Click"></CheckBox>
+            <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBox_Autostart_minimized" Margin="25 0" Content="{DynamicResource ResourceKey=RunMinimisedOnStartup}" Click="checkBox_Autostart_minimized_Click"></CheckBox>
         </Grid>
     </Grid>
 </UserControl>

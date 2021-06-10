@@ -15,6 +15,7 @@ namespace CodeScannerGenerator
     {
         private List<Browser> browsers;
         public string BrowserPath { get { return browsers[comboBox_Browsers.SelectedIndex].Path; } }
+        public bool AutotypeConfirmation { get { return (bool)checkBox_AutotypeConfirmation.IsChecked; } }
         public bool HideToTrayOnMinimize { get { return (bool)checkBox_HideToTrayOnMinimize.IsChecked; } }
         public bool HideToTrayOnClose { get { return (bool)checkBox_HideToTrayOnClose.IsChecked; } }
         public bool Autostart { get { return (bool)checkBox_Autostart.IsChecked; } }
@@ -60,6 +61,7 @@ namespace CodeScannerGenerator
 
         public void InitializeCheckboxes()
         {
+            checkBox_AutotypeConfirmation.IsChecked = Properties.Settings.Default.ConfirmAutotype;
             checkBox_HideToTrayOnMinimize.IsChecked = Properties.Settings.Default.HideOnMinimize;
             checkBox_HideToTrayOnClose.IsChecked = Properties.Settings.Default.HideOnClose;
             checkBox_Autostart.IsChecked = Properties.Settings.Default.Autostart;
@@ -77,6 +79,12 @@ namespace CodeScannerGenerator
         private void comboBox_Browsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Properties.Settings.Default.Browser = comboBox_Browsers.SelectedItem.ToString();
+            Properties.Settings.Default.Save();
+        }
+
+        private void checkBox_AutotypeConfirmation_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ConfirmAutotype = AutotypeConfirmation;
             Properties.Settings.Default.Save();
         }
 

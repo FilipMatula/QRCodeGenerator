@@ -142,5 +142,17 @@ namespace CodeScannerGenerator.Properties {
                 this["Autostart_minimized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ConfirmAutotype {
+            get {
+                return ((bool)(this["ConfirmAutotype"]));
+            }
+            set {
+                this["ConfirmAutotype"] = value;
+            }
+        }
     }
 }

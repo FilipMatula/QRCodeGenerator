@@ -186,12 +186,20 @@ namespace CodeScannerGenerator
 
                     if (IsAutotype)
                     {
-                        string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + scannedText + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
-                        MessageBoxResult messageBoxResult = MessageBox.Show(text,
-                                                  LocUtil.TranslatedString("CodeScannedTitle", this),
-                                                  MessageBoxButton.YesNo,
-                                                  MessageBoxImage.Question);
-                        if (messageBoxResult == MessageBoxResult.Yes)
+                        if (Properties.Settings.Default.ConfirmAutotype)
+                        {
+                            string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + scannedText + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
+                            MessageBoxResult messageBoxResult = MessageBox.Show(text,
+                                                      LocUtil.TranslatedString("CodeScannedTitle", this),
+                                                      MessageBoxButton.YesNo,
+                                                      MessageBoxImage.Question);
+                            if (messageBoxResult == MessageBoxResult.Yes)
+                            {
+                                Autotyped?.Invoke(scannedText);
+                                IsAutotype = false;
+                            }
+                        }
+                        else
                         {
                             Autotyped?.Invoke(scannedText);
                             IsAutotype = false;
@@ -209,10 +217,28 @@ namespace CodeScannerGenerator
                     msw.ShowDialog();
                     if (msw.Result != null)
                     {
+                        saveInClipboard(msw.Result.Text);
+
                         if (IsAutotype)
                         {
-                            Autotyped?.Invoke(msw.Result.Text);
-                            IsAutotype = false;
+                            if (Properties.Settings.Default.ConfirmAutotype)
+                            {
+                                string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + msw.Result.Text + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
+                                MessageBoxResult messageBoxResult = MessageBox.Show(text,
+                                                          LocUtil.TranslatedString("CodeScannedTitle", this),
+                                                          MessageBoxButton.YesNo,
+                                                          MessageBoxImage.Question);
+                                if (messageBoxResult == MessageBoxResult.Yes)
+                                {
+                                    Autotyped?.Invoke(msw.Result.Text);
+                                    IsAutotype = false;
+                                }
+                            }
+                            else
+                            {
+                                Autotyped?.Invoke(msw.Result.Text);
+                                IsAutotype = false;
+                            }
                         }
                         else
                         {
@@ -250,7 +276,8 @@ namespace CodeScannerGenerator
 
         private void saveInClipboard(string text)
         {
-            System.Windows.Forms.Clipboard.SetText(text);
+            if (!string.IsNullOrEmpty(text))
+                System.Windows.Forms.Clipboard.SetText(text);
         }
 
         private Bitmap prepareBitmapToScan(Bitmap bitmap)
