@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using Tyrrrz.Extensions;
 using ZXing;
 using ZXing.Common;
 
@@ -71,7 +72,7 @@ namespace CodeScannerGenerator
         {
             if (comboBox_Scan_Type.SelectedItem != null)
             {
-                if (comboBox_Scan_Type.SelectedIndex != 0 && (BarcodeFormat)comboBox_Scan_Type.SelectedItem == BarcodeFormat.CODE_128)
+                if (comboBox_Scan_Type.SelectedIndex != 0 && ((BarcodeFormat)comboBox_Scan_Type.SelectedItem).IsEither(Constants.BarcodeFormats))
                     VideoPreviewWidget.LowerRectangle = true;
                 else
                     VideoPreviewWidget.LowerRectangle = false;
@@ -188,7 +189,7 @@ namespace CodeScannerGenerator
                     {
                         if (Properties.Settings.Default.ConfirmAutotype)
                         {
-                            string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + scannedText + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
+                            string text = LocUtil.TranslatedString("CodeScannedMessage0") + " " + results[0].BarcodeFormat.ToString() + " " + LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + scannedText + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
                             MessageBoxResult messageBoxResult = MessageBox.Show(text,
                                                       LocUtil.TranslatedString("CodeScannedTitle", this),
                                                       MessageBoxButton.YesNo,
@@ -207,7 +208,7 @@ namespace CodeScannerGenerator
                     }
                     else
                     {
-                        ShowScannedCodeInfo(scannedText);
+                        ShowScannedCodeInfo(results[0].BarcodeFormat, scannedText);
                     }
                 }
                 else
@@ -223,7 +224,7 @@ namespace CodeScannerGenerator
                         {
                             if (Properties.Settings.Default.ConfirmAutotype)
                             {
-                                string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + msw.Result.Text + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
+                                string text = LocUtil.TranslatedString("CodeScannedMessage0") + " " + msw.Result.Format.ToString() + " " + LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + msw.Result.Text + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
                                 MessageBoxResult messageBoxResult = MessageBox.Show(text,
                                                           LocUtil.TranslatedString("CodeScannedTitle", this),
                                                           MessageBoxButton.YesNo,
@@ -242,7 +243,7 @@ namespace CodeScannerGenerator
                         }
                         else
                         {
-                            ShowScannedCodeInfo(msw.Result.Text);
+                            ShowScannedCodeInfo(msw.Result.Format, msw.Result.Text);
                         }
                     }
                 }
@@ -251,9 +252,9 @@ namespace CodeScannerGenerator
             }
         }
 
-        private void ShowScannedCodeInfo(string code)
+        private void ShowScannedCodeInfo(BarcodeFormat format, string code)
         {
-            string text = LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + code + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this);
+            string text = LocUtil.TranslatedString("CodeScannedMessage0") + " " + format.ToString() + " " + LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + code + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this);
             Uri uriResult;
             bool UriParseResult = Uri.TryCreate(code, UriKind.Absolute, out uriResult)
                 && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);

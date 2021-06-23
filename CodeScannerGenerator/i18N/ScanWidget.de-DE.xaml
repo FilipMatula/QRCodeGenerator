@@ -19,7 +19,8 @@
     <sys:String x:Key="IncorrectURIMessage">Der gescannte Code-Text ist nicht das richtige URI-Format.</sys:String>
     <sys:String x:Key="CodeScannedTitle">Automatisches Ausfüllen mit gescanntem Code</sys:String>
     <sys:String x:Key="CodeScannedTitle2">Code gescannt</sys:String>
-    <sys:String x:Key="CodeScannedMessage1">Gescannter Text:</sys:String>
+    <sys:String x:Key="CodeScannedMessage0">Gescannter Typencode:</sys:String>
+    <sys:String x:Key="CodeScannedMessage1">text:</sys:String>
     <sys:String x:Key="CodeScannedMessage2">Der Text wurde in die Zwischenablage kopiert.</sys:String>
     <sys:String x:Key="CodeScannedMessage3">Möchten Sie das Feld mit diesem Text automatisch ausfüllen?</sys:String>
     <sys:String x:Key="CodeScannedMessage4">Möchten Sie es im Browser öffnen?</sys:String>

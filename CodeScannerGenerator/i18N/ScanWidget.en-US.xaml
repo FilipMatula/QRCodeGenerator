@@ -19,7 +19,8 @@
     <sys:String x:Key="IncorrectURIMessage">Scanned Code text is not URI valid format.</sys:String>
     <sys:String x:Key="CodeScannedTitle">Autofill with scanned code</sys:String>
     <sys:String x:Key="CodeScannedTitle2">Code scanned</sys:String>
-    <sys:String x:Key="CodeScannedMessage1">Scanned text:</sys:String>
+    <sys:String x:Key="CodeScannedMessage0">Scanned code type:</sys:String>
+    <sys:String x:Key="CodeScannedMessage1">text:</sys:String>
     <sys:String x:Key="CodeScannedMessage2">Text was copied to clipboard.</sys:String>
     <sys:String x:Key="CodeScannedMessage3">Do you want to autofill field with this text?</sys:String>
     <sys:String x:Key="CodeScannedMessage4">Do you want to open it in browser?</sys:String>
