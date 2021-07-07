@@ -154,5 +154,41 @@ namespace CodeScannerGenerator.Properties {
                 this["ConfirmAutotype"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowFloatingButton {
+            get {
+                return ((bool)(this["ShowFloatingButton"]));
+            }
+            set {
+                this["ShowFloatingButton"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double FloatingButtonTop {
+            get {
+                return ((double)(this["FloatingButtonTop"]));
+            }
+            set {
+                this["FloatingButtonTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double FloatingButtonLeft {
+            get {
+                return ((double)(this["FloatingButtonLeft"]));
+            }
+            set {
+                this["FloatingButtonLeft"] = value;
+            }
+        }
     }
 }

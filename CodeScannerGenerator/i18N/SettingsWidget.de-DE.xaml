@@ -12,4 +12,5 @@
     <sys:String x:Key="RunOnStartup">Führen Sie die Anwendung beim Windows-Start aus</sys:String>
     <sys:String x:Key="RunMinimisedOnStartup">Wird beim Start von Windows minimiert ausgeführt</sys:String>
     <sys:String x:Key="AutotypeConfimation">Automatisch eingeben bestätigen</sys:String>
+    <sys:String x:Key="ShowFloatingButton">Schwebende Schaltfläche anzeigen</sys:String>
 </ResourceDictionary>

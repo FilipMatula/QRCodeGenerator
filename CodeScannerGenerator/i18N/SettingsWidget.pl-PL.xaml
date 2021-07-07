@@ -12,4 +12,5 @@
     <sys:String x:Key="RunOnStartup">Uruchom aplikację przy starcie systemu Windows</sys:String>
     <sys:String x:Key="RunMinimisedOnStartup">Uruchom zminimalizowane podczas uruchamiania systemu Windows</sys:String>
     <sys:String x:Key="AutotypeConfimation">Potwierdź auto uzupełnianie</sys:String>
+    <sys:String x:Key="ShowFloatingButton">Pokaż przycisk pływający</sys:String>
 </ResourceDictionary>

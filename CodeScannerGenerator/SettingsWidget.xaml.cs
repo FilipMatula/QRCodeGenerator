@@ -20,6 +20,7 @@ namespace CodeScannerGenerator
         public bool HideToTrayOnClose { get { return (bool)checkBox_HideToTrayOnClose.IsChecked; } }
         public bool Autostart { get { return (bool)checkBox_Autostart.IsChecked; } }
         public bool Autostart_minimized { get { return (bool)checkBox_Autostart_minimized.IsChecked; } }
+        public bool ShowFloatingButton { get { return (bool)checkBox_ShowFloatingButton.IsChecked; } }
         public Hotkey AutotypeHotkey { get; set; } = new Hotkey();
 
         public event Action HotkeyChanged;
@@ -66,6 +67,7 @@ namespace CodeScannerGenerator
             checkBox_HideToTrayOnClose.IsChecked = Properties.Settings.Default.HideOnClose;
             checkBox_Autostart.IsChecked = Properties.Settings.Default.Autostart;
             checkBox_Autostart_minimized.IsChecked = Properties.Settings.Default.Autostart_minimized;
+            checkBox_ShowFloatingButton.IsChecked = Properties.Settings.Default.ShowFloatingButton;
 
             checkBox_Autostart_minimized.IsEnabled = Autostart;
         }
@@ -148,6 +150,12 @@ namespace CodeScannerGenerator
                 AddToAutostart(Autostart_minimized);
             else
                 DeleteFromAutostart();
+        }
+
+        private void checkBox_ShowFloatingButton_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ShowFloatingButton = ShowFloatingButton;
+            Properties.Settings.Default.Save();
         }
     }
 }

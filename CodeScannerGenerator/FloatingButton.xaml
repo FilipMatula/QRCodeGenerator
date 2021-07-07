@@ -1,0 +1,25 @@
+﻿<Window x:Class="CodeScannerGenerator.FloatingButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CodeScannerGenerator"
+        mc:Ignorable="d"
+        Title="FloatingButton" Height="80" Width="60"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ToolTip="{DynamicResource ResourceKey=Tooltip}"
+        Loaded="Window_Loaded"
+        AllowsTransparency="True"  
+        Background="Transparent"
+        ShowActivated="false">
+    <Border CornerRadius="10" BorderThickness="2" BorderBrush="Crimson" >
+        <Border.Background>
+            <ImageBrush ImageSource="/images/scanme.png"  Stretch="UniformToFill"/>
+        </Border.Background>
+        <Grid>
+        </Grid>
+    </Border>
+</Window>

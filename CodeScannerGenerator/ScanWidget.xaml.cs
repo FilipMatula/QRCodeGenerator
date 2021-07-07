@@ -63,8 +63,8 @@ namespace CodeScannerGenerator
 
         public void startCameraStream()
         {
-            MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-            if (!mainWindow.IsInTray())
+            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+            if (mainWindow != null && !mainWindow.IsInTray())
                 CameraControl.startCameraStream(ref captureDevice, CurrectDevice, scanCodeTimer);
         }
 

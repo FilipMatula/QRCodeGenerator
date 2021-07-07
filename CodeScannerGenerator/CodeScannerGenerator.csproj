@@ -97,6 +97,9 @@
     </ApplicationDefinition>
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Controls\HotkeyTextBox.cs" />
+    <Compile Include="FloatingButton.xaml.cs">
+      <DependentUpon>FloatingButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GenerateWidget.xaml.cs">
       <DependentUpon>GenerateWidget.xaml</DependentUpon>
     </Compile>
@@ -121,7 +124,12 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="images\scanme.png" />
     <Resource Include="images\flag_poland.png" />
+    <Page Include="FloatingButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GenerateWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,6 +183,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="i18N\MultipleScanWindow.pl-PL.xaml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="i18N\FloatingButton.de-DE.xaml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="i18N\FloatingButton.en-US.xaml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="i18N\FloatingButton.pl-PL.xaml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

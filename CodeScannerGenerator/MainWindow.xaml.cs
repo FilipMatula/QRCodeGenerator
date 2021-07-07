@@ -21,10 +21,11 @@ namespace CodeScannerGenerator
         System.Windows.Forms.NotifyIcon notifyIcon;
         WindowState storedWindowState = WindowState.Normal;
         bool forceClosing = false;
+        FloatingButton floatingButton;
         #endregion
 
         #region ScanPageVariables
-       
+
         bool showNoDeviceError = false;
         bool startUp = true;
         long millisecondsFromLastScan = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
@@ -36,10 +37,14 @@ namespace CodeScannerGenerator
         #endregion
 
         bool AutostartMinimized { get { return (bool)Application.Current.Properties["Start_Minimized"]; } }
+        bool ShowFloatingButton { get { return Properties.Settings.Default.ShowFloatingButton; } }
 
         public MainWindow()
         {
             InitializeComponent();
+
+            floatingButton = new FloatingButton();
+            floatingButton.MouseDoubleClick += FloatingButton_MouseDoubleClick;
 
             // Language initialization
             LocUtil.SetDefaultLanguage(this);
@@ -72,6 +77,11 @@ namespace CodeScannerGenerator
                 WindowState = WindowState.Minimized;
         }
 
+        private void FloatingButton_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            setAutotype();
+        }
+
         private void MainWindow_SourceInitialized(object sender, EventArgs e)
         {
             if (AutostartMinimized == true)
@@ -88,6 +98,8 @@ namespace CodeScannerGenerator
         {
             HideToTray(false);
             Autotype(obj);
+            if (floatingButton != null && ShowFloatingButton)
+                floatingButton.Show();
         }
 
         private void InitializePictureBoxes()
@@ -151,24 +163,28 @@ namespace CodeScannerGenerator
             AutotypeHotkeyId = hook.RegisterHotKey(SettingsWidget.AutotypeHotkey.Modifiers, SettingsWidget.AutotypeHotkey.Key);
         }
 
+        private void setAutotype()
+        {
+            if (WindowState != WindowState.Minimized && IsActive)
+                return;
+
+            if (ScanWidget.FilterInfoCollection == null || ScanWidget.FilterInfoCollection.Count == 0)
+                return;
+
+            if (IsInTray())
+                ShowFromTray();
+            else
+                WindowState = WindowState.Normal;
+
+            ListViewMenu.SelectedIndex = 0;
+            ScanWidget.IsAutotype = true;
+        }
+
         private void hotkey_Pressed(object sender, KeyPressedEventArgs e)
         {
             if (e.Key == SettingsWidget.AutotypeHotkey.Key && e.Modifier == SettingsWidget.AutotypeHotkey.Modifiers)
             {
-                if (WindowState != WindowState.Minimized && IsActive)
-                    return;
-
-                if (ScanWidget.FilterInfoCollection == null || ScanWidget.FilterInfoCollection.Count == 0)
-                    return;
-
-                if (IsInTray())
-                    ShowFromTray();
-                else
-                    WindowState = WindowState.Normal;
-
-                Activate();
-                ListViewMenu.SelectedIndex = 0;
-                ScanWidget.IsAutotype = true;
+                setAutotype();
             }
         }
 
@@ -186,12 +202,16 @@ namespace CodeScannerGenerator
         public void HideToTray(bool showBalloonTip = true)
         {
             Hide();
+            if (floatingButton != null && ShowFloatingButton && showBalloonTip)
+                floatingButton.Show();
             if (notifyIcon != null && showBalloonTip)
                 notifyIcon.ShowBalloonTip(2000);
         }
 
         private void ShowFromTray()
         {
+            if (floatingButton != null && ShowFloatingButton)
+                floatingButton.Hide();
             Show();
             WindowState = storedWindowState;
 
@@ -200,6 +220,8 @@ namespace CodeScannerGenerator
                 MessageBox.Show(LocUtil.TranslatedString("NoDeviceMessage", this), LocUtil.TranslatedString("NoDeviceTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
                 showNoDeviceError = false;
             }
+
+            Activate();
         }
 
         public bool IsInTray()
@@ -213,7 +235,9 @@ namespace CodeScannerGenerator
         private void MainWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (notifyIcon != null)
+            {
                 notifyIcon.Visible = !IsVisible;
+            }
         }
 
         private void MainWindow_StateChanged(object sender, EventArgs e)
@@ -234,6 +258,9 @@ namespace CodeScannerGenerator
             {
                 notifyIcon.Dispose();
                 notifyIcon = null;
+                if (floatingButton != null)
+                    floatingButton.Close();
+                floatingButton = null;
             }
             else
             {
@@ -457,6 +484,7 @@ namespace CodeScannerGenerator
             ScanWidget.SwitchLanguage(key);
             GenerateWidget.SwitchLanguage(key);
             SettingsWidget.SwitchLanguage(key);
+            floatingButton.SwitchLanguage(key);
             switch (key)
             {
                 case "en-US":
