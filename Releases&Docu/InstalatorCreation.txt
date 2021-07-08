@@ -1,0 +1,7 @@
+1. Rebuild Installator project
+2. Open Installer.msi with Orca.exe
+3. Go to View->Summary information...
+4. Check UAC Compliant flag
+5. Go to InstallExecuteSequence table
+6. Set RemoveExistingProducts value to 1450
+7. Save changes
