@@ -6,11 +6,11 @@
 
     <!--Settings card-->
     <sys:String x:Key="Browser">Browser:</sys:String>
-    <sys:String x:Key="AutotypeHotkey">Hotkey automatisch eingeben:</sys:String>
-    <sys:String x:Key="HideToTrayOnMinimise">Verstecke dich vor dem Systray, wenn es minimiert ist</sys:String>
-    <sys:String x:Key="HideToTrayOnClose">Verstecke dich im geschlossenen Zustand vor dem Systray</sys:String>
-    <sys:String x:Key="RunOnStartup">Führen Sie die Anwendung beim Windows-Start aus</sys:String>
+    <sys:String x:Key="AutotypeHotkey">Hotkey für automatische Eingabe:</sys:String>
+    <sys:String x:Key="HideToTrayOnMinimise">Bei Minimierung verstecken</sys:String>
+    <sys:String x:Key="HideToTrayOnClose">Beim Schließen minieren</sys:String>
+    <sys:String x:Key="RunOnStartup">Beim Windows-Start ausführen</sys:String>
     <sys:String x:Key="RunMinimisedOnStartup">Wird beim Start von Windows minimiert ausgeführt</sys:String>
-    <sys:String x:Key="AutotypeConfimation">Automatisch eingeben bestätigen</sys:String>
+    <sys:String x:Key="AutotypeConfimation">Automatische Eingabe mir Hotkey bestätigen</sys:String>
     <sys:String x:Key="ShowFloatingButton">Schwebende Schaltfläche anzeigen</sys:String>
 </ResourceDictionary>
