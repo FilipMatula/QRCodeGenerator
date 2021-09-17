@@ -16,8 +16,16 @@ namespace CodeScannerGenerator
     public partial class GenerateWidget : UserControl
     {
         private System.Windows.Forms.PictureBox pictureBoxGenerate;
-        public int CodeWidth { get { return Int32.Parse(Width_Generate.Text); } }
-        public int CodeHeight { get { return Int32.Parse(Height_Generate.Text); } }
+        public int CodeWidth { get {
+                int result;
+                bool success = Int32.TryParse(Width_Generate.Text, out result);
+                return success ? result : 0;
+            } }
+        public int CodeHeight { get {
+                int result;
+                bool success = Int32.TryParse(Height_Generate.Text, out result);
+                return success ? result : 0;
+            } }
 
         public GenerateWidget()
         {
