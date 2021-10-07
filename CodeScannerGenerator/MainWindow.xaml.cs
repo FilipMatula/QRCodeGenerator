@@ -208,7 +208,7 @@ namespace CodeScannerGenerator
                 notifyIcon.ShowBalloonTip(2000);
         }
 
-        private void ShowFromTray()
+        public void ShowFromTray()
         {
             if (floatingButton != null && ShowFloatingButton)
                 floatingButton.Hide();
