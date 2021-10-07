@@ -3,6 +3,7 @@ using CodeScannerGenerator.Common;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,7 +43,7 @@ namespace CodeScannerGenerator
         public MainWindow()
         {
             InitializeComponent();
-
+            Title = "Code Scanner and Generator v" + getRunningVersion();
             floatingButton = new FloatingButton();
             floatingButton.MouseDoubleClick += FloatingButton_MouseDoubleClick;
 
@@ -75,6 +76,15 @@ namespace CodeScannerGenerator
 
             if (AutostartMinimized == true)
                 WindowState = WindowState.Minimized;
+        }
+
+        private string getRunningVersion()
+        {
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var splitted = version.Split('.');
+            if (splitted[splitted.Length - 1] == "0")
+                version = version.Substring(0, version.LastIndexOf('.'));
+            return version;
         }
 
         private void FloatingButton_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

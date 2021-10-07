@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CodeScannerGenerator"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Code Scanner and Generator" Height="550" MinHeight="550" Width="1000" MinWidth="1000" WindowStartupLocation="CenterScreen" Icon="/images/qrcode.ico"
+        Height="550" MinHeight="550" Width="1000" MinWidth="1000" WindowStartupLocation="CenterScreen" Icon="/images/qrcode.ico"
         Loaded="Window_Loaded"
         ContentRendered="Window_ContentRendered">
 

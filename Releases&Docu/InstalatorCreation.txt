@@ -1,3 +1,8 @@
+Prepare:
+1. CodeScannerGenerator -> right click -> Properties -> Assembly Information -> Change version
+2. Installator -> Change version -> Accept with YES
+
+Building:
 1. Rebuild Installator project
 2. Open Installer.msi with Orca.exe
 3. Go to View->Summary information...
