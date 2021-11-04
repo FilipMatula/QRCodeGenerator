@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +25,7 @@ namespace CodeScannerGenerator
 
         /// <summary>The unique mutex name.</summary>
         private const string UniqueMutexName = "1004f9fc-c318-47e4-8b5b-55228322a9b0";
+        private const string PIPE_NAME = "MutexQRCodePipe"; // Name of pipe
 
         /// <summary>The event wait handle.</summary>
         private EventWaitHandle _eventWaitHandle;
@@ -46,6 +49,15 @@ namespace CodeScannerGenerator
 
             GC.KeepAlive(_mutex);
 
+            bool scan_now = false;
+            for (int i = 0; i != e.Args.Length; ++i)
+            {
+                if (e.Args[i] == "/ScanNow" || e.Args[i] == "qrcode://scannow/")
+                {
+                    scan_now = true;
+                }
+            }
+
             if (isOwned)
             {
                 // Spawn a thread which will be waiting for our event
@@ -54,8 +66,26 @@ namespace CodeScannerGenerator
                     {
                         while (_eventWaitHandle.WaitOne())
                         {
-                            Current.Dispatcher.BeginInvoke(
-                                (Action)(() => ((MainWindow)Current.MainWindow).ShowFromTray()));
+                            // Start pipe server
+                            NamedPipeServerStream pipeStream = new NamedPipeServerStream(PIPE_NAME, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances); // Create Server pipe and listen for clients
+                            pipeStream.WaitForConnection(); // Wait for client connection
+
+                            using (StreamReader reader = new StreamReader(pipeStream)) // Read message from pipe stream
+                            {
+                                // Read message from pipe
+                                string message = reader.ReadLine();
+
+                                if (message == "ScanNow")
+                                {
+                                    Current.Dispatcher.BeginInvoke(
+                                        (Action)(() => ((MainWindow)Current.MainWindow).setAutotype()));
+                                }
+                                else
+                                {
+                                    Current.Dispatcher.BeginInvoke(
+                                        (Action)(() => ((MainWindow)Current.MainWindow).ShowFromTray()));
+                                }
+                            }
                         }
                     });
 
@@ -71,15 +101,26 @@ namespace CodeScannerGenerator
                 }
 
                 Application.Current.Properties.Add("Start_Minimized", start_minimized);
+                Application.Current.Properties.Add("Scan_Now", scan_now);
                 thread.Start();
                 return;
             }
 
             // Notify other instance so it could bring itself to foreground.
-            _eventWaitHandle.Set();
+            using (NamedPipeClientStream client = new NamedPipeClientStream(PIPE_NAME)) // Create connection to pipe
+            {
+                _eventWaitHandle.Set();
+                client.Connect(5000); // Maximum wait 5 seconds
+                using (StreamWriter writer = new StreamWriter(client))
+                {
+                    writer.WriteLine(scan_now ? "ScanNow" : ""); // Write command line parameter to the first instance
+                }
+            }
+            //_eventWaitHandle.Set();
 
             // Terminate this instance.
             Application.Current.Properties.Add("Start_Minimized", false);
+            Application.Current.Properties.Add("Scan_Now", false);
             Application.Current.Shutdown();
         }
     }

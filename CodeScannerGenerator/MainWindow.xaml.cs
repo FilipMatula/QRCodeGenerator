@@ -38,6 +38,7 @@ namespace CodeScannerGenerator
         #endregion
 
         bool AutostartMinimized { get { return (bool)Application.Current.Properties["Start_Minimized"]; } }
+        bool ScanNow { get { return (bool)Application.Current.Properties["Scan_Now"]; } }
         bool ShowFloatingButton { get { return Properties.Settings.Default.ShowFloatingButton; } }
 
         public MainWindow()
@@ -173,9 +174,9 @@ namespace CodeScannerGenerator
             AutotypeHotkeyId = hook.RegisterHotKey(SettingsWidget.AutotypeHotkey.Modifiers, SettingsWidget.AutotypeHotkey.Key);
         }
 
-        private void setAutotype()
+        public void setAutotype()
         {
-            if (WindowState != WindowState.Minimized && IsActive)
+            if (WindowState != WindowState.Minimized && IsActive && !ScanNow)
                 return;
 
             if (ScanWidget.FilterInfoCollection == null || ScanWidget.FilterInfoCollection.Count == 0)
@@ -449,6 +450,9 @@ namespace CodeScannerGenerator
 
             // Initialize checkboxes
             InitializeCheckboxes();
+
+            if (ScanNow == true)
+                setAutotype();
         }
 
         // Activate devices plug and unplug signals
