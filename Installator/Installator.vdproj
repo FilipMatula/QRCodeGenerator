@@ -667,15 +667,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CodeScannerGenerator"
-        "ProductCode" = "8:{364FD74C-A432-46F2-AEC5-EE03895D09DF}"
-        "PackageCode" = "8:{A7388BEF-2992-42D7-80AA-3FCE2A81AAA5}"
+        "ProductCode" = "8:{F70D7AFB-33CD-4F37-858D-68C1E597679C}"
+        "PackageCode" = "8:{ECD4FFAA-109D-4611-B906-DAB667D0CABC}"
         "UpgradeCode" = "8:{E2B77738-FAD3-49CD-9C8D-87770C6F2E59}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.2"
+        "ProductVersion" = "8:2.0.3"
         "Manufacturer" = "8:MTU"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1245,7 +1245,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8A2C244C8FC941479FA3FBA817A07D73"
             {
-            "SourcePath" = "8:..\\CodeScannerGenerator\\obj\\Debug\\CodeScannerGenerator.exe"
+            "SourcePath" = "8:..\\CodeScannerGenerator\\obj\\Release\\CodeScannerGenerator.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FA7193BB783E47C1B498A8C7BA435D06"
