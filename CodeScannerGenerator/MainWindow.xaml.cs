@@ -39,6 +39,8 @@ namespace CodeScannerGenerator
 
         bool AutostartMinimized { get { return (bool)Application.Current.Properties["Start_Minimized"]; } }
         bool ScanNow { get { return (bool)Application.Current.Properties["Scan_Now"]; } }
+        bool ScanWeb { get { return (bool)Application.Current.Properties["Scan_Web"]; } }
+        bool SendCopyShortKey { get; set; } = false;
         bool ShowFloatingButton { get { return Properties.Settings.Default.ShowFloatingButton; } }
 
         public MainWindow()
@@ -174,9 +176,11 @@ namespace CodeScannerGenerator
             AutotypeHotkeyId = hook.RegisterHotKey(SettingsWidget.AutotypeHotkey.Modifiers, SettingsWidget.AutotypeHotkey.Key);
         }
 
-        public void setAutotype()
+        public void setAutotype(bool withCopyShortKey = false)
         {
-            if (WindowState != WindowState.Minimized && IsActive && !ScanNow)
+            SendCopyShortKey = withCopyShortKey;
+
+            if (WindowState != WindowState.Minimized && IsActive && (!ScanNow || !ScanWeb))
                 return;
 
             if (ScanWidget.FilterInfoCollection == null || ScanWidget.FilterInfoCollection.Count == 0)
@@ -375,11 +379,19 @@ namespace CodeScannerGenerator
 
         private void Autotype(string text)
         {
-            foreach(char c in text)
+            if (SendCopyShortKey == true)
             {
-                System.Windows.Forms.SendKeys.SendWait(c.ToSendKeyNormalize());
+                System.Windows.Forms.SendKeys.SendWait("^{c}");
                 System.Windows.Forms.SendKeys.Flush();
-                Thread.Sleep(20);
+            }
+            else
+            {
+                foreach (char c in text)
+                {
+                    System.Windows.Forms.SendKeys.SendWait(c.ToSendKeyNormalize());
+                    System.Windows.Forms.SendKeys.Flush();
+                    Thread.Sleep(20);
+                }
             }
         }
 
@@ -451,8 +463,8 @@ namespace CodeScannerGenerator
             // Initialize checkboxes
             InitializeCheckboxes();
 
-            if (ScanNow == true)
-                setAutotype();
+            if (ScanNow == true || ScanWeb == true)
+                setAutotype(ScanWeb);
         }
 
         // Activate devices plug and unplug signals

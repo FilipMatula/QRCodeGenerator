@@ -50,11 +50,16 @@ namespace CodeScannerGenerator
             GC.KeepAlive(_mutex);
 
             bool scan_now = false;
+            bool scan_web = false;
             for (int i = 0; i != e.Args.Length; ++i)
             {
                 if (e.Args[i] == "/ScanNow" || e.Args[i] == "qrcode://scannow/")
                 {
                     scan_now = true;
+                }
+                else if (e.Args[i] == "/ScanWeb" || e.Args[i] == "qrcode://scanweb/")
+                {
+                    scan_web = true;
                 }
             }
 
@@ -80,6 +85,11 @@ namespace CodeScannerGenerator
                                     Current.Dispatcher.BeginInvoke(
                                         (Action)(() => ((MainWindow)Current.MainWindow).setAutotype()));
                                 }
+                                else if (message == "ScanWeb")
+                                {
+                                    Current.Dispatcher.BeginInvoke(
+                                        (Action)(() => ((MainWindow)Current.MainWindow).setAutotype(true)));
+                                }
                                 else
                                 {
                                     Current.Dispatcher.BeginInvoke(
@@ -102,6 +112,7 @@ namespace CodeScannerGenerator
 
                 Application.Current.Properties.Add("Start_Minimized", start_minimized);
                 Application.Current.Properties.Add("Scan_Now", scan_now);
+                Application.Current.Properties.Add("Scan_Web", scan_web);
                 thread.Start();
                 return;
             }
@@ -113,7 +124,19 @@ namespace CodeScannerGenerator
                 client.Connect(5000); // Maximum wait 5 seconds
                 using (StreamWriter writer = new StreamWriter(client))
                 {
-                    writer.WriteLine(scan_now ? "ScanNow" : ""); // Write command line parameter to the first instance
+                    if (scan_now == true)
+                        writer.WriteLine("ScanNow");
+                    else if (scan_web == true)
+                        writer.WriteLine("ScanWeb");
+                    else
+                        writer.WriteLine("");
+                    //writer.WriteLine(scan_now ? "ScanNow" : "");
+                    //if (scan_now)
+                    //    writer.WriteLine("ScanNow"); // Write command line parameter to the first instance
+                    //else if (scan_web)
+                    //    writer.WriteLine("ScanWeb");
+                    //else
+                    //    writer.WriteLine("");
                 }
             }
             //_eventWaitHandle.Set();
@@ -121,6 +144,7 @@ namespace CodeScannerGenerator
             // Terminate this instance.
             Application.Current.Properties.Add("Start_Minimized", false);
             Application.Current.Properties.Add("Scan_Now", false);
+            Application.Current.Properties.Add("Scan_Web", false);
             Application.Current.Shutdown();
         }
     }
