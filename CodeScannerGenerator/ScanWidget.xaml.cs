@@ -113,9 +113,9 @@ namespace CodeScannerGenerator
 
                 startCameraStream();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(LocUtil.TranslatedString("UnexpectedErrorTitle", this), ex.Message + ex.StackTrace, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(ex.Message + ex.StackTrace, LocUtil.TranslatedString("UnexpectedErrorTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -125,17 +125,18 @@ namespace CodeScannerGenerator
             if (comboBox_Devices.SelectedIndex == -1)
                 return;
 
+            CurrectDevice = FilterInfoCollection[comboBox_Devices.SelectedIndex];
+            captureDevice = new VideoCaptureDevice(FilterInfoCollection[comboBox_Devices.SelectedIndex].MonikerString);
+
             if (captureDevice.VideoCapabilities.Length > 0)
             {
-                CurrectDevice = FilterInfoCollection[comboBox_Devices.SelectedIndex];
-                captureDevice = new VideoCaptureDevice(FilterInfoCollection[comboBox_Devices.SelectedIndex].MonikerString);
                 captureDevice.NewFrame += CaptureDevice_NewFrame;
                 captureDevice.VideoResolution = CameraControl.selectResolution(captureDevice);
             }
             else
             {
                 CurrectDevice = null;
-                MessageBox.Show(LocUtil.TranslatedString("DeviceNotConnectedErrorTitle", this), LocUtil.TranslatedString("DeviceNotConnectedErrorMessage", this), MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(LocUtil.TranslatedString("DeviceNotConnectedErrorMessage", this), LocUtil.TranslatedString("DeviceNotConnectedErrorTitle", this), MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
