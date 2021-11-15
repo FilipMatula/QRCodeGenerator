@@ -24,4 +24,8 @@
     <sys:String x:Key="CodeScannedMessage2">Tekst został skopiowany do schowka.</sys:String>
     <sys:String x:Key="CodeScannedMessage3">Czy chcesz automatycznie wypełnić pole tym tekstem?</sys:String>
     <sys:String x:Key="CodeScannedMessage4">Czy chcesz go otworzyć w przeglądarce?</sys:String>
+    <sys:String x:Key="UnexpectedErrorTitle">Niespodziewany błąd</sys:String>
+    <sys:String x:Key="DeviceNotConnectedErrorTitle">Urządzenie niepodłączone</sys:String>
+    <sys:String x:Key="DeviceNotConnectedErrorMessage">Urządzenie nie zostało znalezione i prawdopodobnie nie jest podłączone.</sys:String>
+    
 </ResourceDictionary>

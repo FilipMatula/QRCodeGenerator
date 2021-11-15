@@ -24,4 +24,8 @@
     <sys:String x:Key="CodeScannedMessage2">Der Text wurde in die Zwischenablage kopiert.</sys:String>
     <sys:String x:Key="CodeScannedMessage3">Möchten Sie das Feld mit diesem Text automatisch ausfüllen?</sys:String>
     <sys:String x:Key="CodeScannedMessage4">Möchten Sie es im Browser öffnen?</sys:String>
+    <sys:String x:Key="UnexpectedErrorTitle">Unerwarteter Fehler</sys:String>
+    <sys:String x:Key="DeviceNotConnectedErrorTitle">Gerät nicht verbunden</sys:String>
+    <sys:String x:Key="DeviceNotConnectedErrorMessage">Gerät konnte nicht gefunden werden und ist wahrscheinlich nicht verbunden.</sys:String>
+    
 </ResourceDictionary>

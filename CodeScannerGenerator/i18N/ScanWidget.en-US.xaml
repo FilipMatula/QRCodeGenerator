@@ -24,4 +24,8 @@
     <sys:String x:Key="CodeScannedMessage2">Text was copied to clipboard.</sys:String>
     <sys:String x:Key="CodeScannedMessage3">Do you want to autofill field with this text?</sys:String>
     <sys:String x:Key="CodeScannedMessage4">Do you want to open it in browser?</sys:String>
+    <sys:String x:Key="UnexpectedErrorTitle">Unexpected error</sys:String>
+    <sys:String x:Key="DeviceNotConnectedErrorTitle">Device not connected</sys:String>
+    <sys:String x:Key="DeviceNotConnectedErrorMessage">Device could not be found and is probably not connected.</sys:String>
+    
 </ResourceDictionary>

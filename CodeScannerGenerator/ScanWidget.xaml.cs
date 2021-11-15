@@ -105,11 +105,18 @@ namespace CodeScannerGenerator
         // On device change take video from camera (also on initialization)
         private void comboBox_Devices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            stopCameraStream();
+            try
+            {
+                stopCameraStream();
 
-            initializeStream();
+                initializeStream();
 
-            startCameraStream();
+                startCameraStream();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(LocUtil.TranslatedString("UnexpectedErrorTitle", this), ex.Message + ex.StackTrace, MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         // Initilize camera stream
@@ -118,10 +125,18 @@ namespace CodeScannerGenerator
             if (comboBox_Devices.SelectedIndex == -1)
                 return;
 
-            CurrectDevice = FilterInfoCollection[comboBox_Devices.SelectedIndex];
-            captureDevice = new VideoCaptureDevice(FilterInfoCollection[comboBox_Devices.SelectedIndex].MonikerString);
-            captureDevice.NewFrame += CaptureDevice_NewFrame;
-            captureDevice.VideoResolution = CameraControl.selectResolution(captureDevice);
+            if (captureDevice.VideoCapabilities.Length > 0)
+            {
+                CurrectDevice = FilterInfoCollection[comboBox_Devices.SelectedIndex];
+                captureDevice = new VideoCaptureDevice(FilterInfoCollection[comboBox_Devices.SelectedIndex].MonikerString);
+                captureDevice.NewFrame += CaptureDevice_NewFrame;
+                captureDevice.VideoResolution = CameraControl.selectResolution(captureDevice);
+            }
+            else
+            {
+                CurrectDevice = null;
+                MessageBox.Show(LocUtil.TranslatedString("DeviceNotConnectedErrorTitle", this), LocUtil.TranslatedString("DeviceNotConnectedErrorMessage", this), MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         // Show camera video in picture box
