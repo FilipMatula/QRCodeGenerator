@@ -180,16 +180,16 @@ namespace CodeScannerGenerator
         {
             SendCopyShortKey = withCopyShortKey;
 
-            if (WindowState != WindowState.Minimized && IsActive && (!ScanNow || !ScanWeb))
-                return;
-
             if (ScanWidget.FilterInfoCollection == null || ScanWidget.FilterInfoCollection.Count == 0)
                 return;
 
             if (IsInTray())
                 ShowFromTray();
             else
+            {
                 WindowState = WindowState.Normal;
+                Activate();
+            }
 
             ListViewMenu.SelectedIndex = 0;
             ScanWidget.IsAutotype = true;
