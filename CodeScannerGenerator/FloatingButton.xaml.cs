@@ -103,17 +103,13 @@ namespace CodeScannerGenerator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var desktopWorkingArea = SystemParameters.WorkArea;
-            //Left = desktopWorkingArea.Right - Width;
-            //Top = desktopWorkingArea.Top - Height;
-            if (Properties.Settings.Default.FloatingButtonLeft != 0)
+            Left = desktopWorkingArea.Width - Width * 2;
+            Top = desktopWorkingArea.Height / 3;
+            if (Properties.Settings.Default.FloatingButtonLeft != 0 && Properties.Settings.Default.FloatingButtonLeft < desktopWorkingArea.Width)
                 Left = Properties.Settings.Default.FloatingButtonLeft;
-            else
-                Left = desktopWorkingArea.Width - Width * 2;
 
-            if (Properties.Settings.Default.FloatingButtonTop != 0)
+            if (Properties.Settings.Default.FloatingButtonTop != 0 && Properties.Settings.Default.FloatingButtonTop < desktopWorkingArea.Height)
                 Top = Properties.Settings.Default.FloatingButtonTop;
-            else
-                Top = desktopWorkingArea.Height / 3;
         }
     }
 }
