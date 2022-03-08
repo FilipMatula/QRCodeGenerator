@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="i18N/GenerateWidget.en-US.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="i18N/SettingsWidget.en-US.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="i18N/MultipleScanWindow.en-US.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="i18N/VCardTemplate.en-US.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

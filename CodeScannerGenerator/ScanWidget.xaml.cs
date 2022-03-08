@@ -32,6 +32,8 @@ namespace CodeScannerGenerator
         public event Action<string> URLOpened;
         public event Action<string> Autotyped;
 
+        private string CurrentVCard { get; set; }
+
         public ScanWidget()
         {
             InitializeComponent();
@@ -194,23 +196,41 @@ namespace CodeScannerGenerator
             {
                 stopCameraStream();
                 blockScanning = true;
-
+                Button_VCard.Visibility = Visibility.Collapsed;
                 if (results.Length == 1)
                 {
                     string scannedText = results[0].ToString();
-                    Text_Scan.Text = scannedText;
                     saveInClipboard(scannedText);
 
-                    if (IsAutotype)
+                    if (scannedText.StartsWith("BEGIN:VCARD"))
                     {
-                        if (Properties.Settings.Default.ConfirmAutotype)
+                        Text_Scan.Text = "VCARD";
+                        Button_VCard.Visibility = Visibility.Visible;
+                        CurrentVCard = scannedText;
+                        VCardTemplate vcardTemplate = new VCardTemplate(LocUtil.GetCurrentCultureName(this), true);
+                        vcardTemplate.Owner = Application.Current.MainWindow;
+                        vcardTemplate.SetVCardText(scannedText);
+                        vcardTemplate.ShowDialog();
+                    }
+                    else
+                    {
+                        Text_Scan.Text = scannedText;
+                        if (IsAutotype)
                         {
-                            string text = LocUtil.TranslatedString("CodeScannedMessage0") + " " + results[0].BarcodeFormat.ToString() + " " + LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + scannedText + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
-                            MessageBoxResult messageBoxResult = MessageBox.Show(text,
-                                                      LocUtil.TranslatedString("CodeScannedTitle", this),
-                                                      MessageBoxButton.YesNo,
-                                                      MessageBoxImage.Question);
-                            if (messageBoxResult == MessageBoxResult.Yes)
+                            if (Properties.Settings.Default.ConfirmAutotype)
+                            {
+                                string text = LocUtil.TranslatedString("CodeScannedMessage0") + " " + results[0].BarcodeFormat.ToString() + " " + LocUtil.TranslatedString("CodeScannedMessage1", this) + " \"" + scannedText + "\".\n\n" + LocUtil.TranslatedString("CodeScannedMessage2", this) + "\n\n" + LocUtil.TranslatedString("CodeScannedMessage3", this);
+                                MessageBoxResult messageBoxResult = MessageBox.Show(text,
+                                                          LocUtil.TranslatedString("CodeScannedTitle", this),
+                                                          MessageBoxButton.YesNo,
+                                                          MessageBoxImage.Question);
+                                if (messageBoxResult == MessageBoxResult.Yes)
+                                {
+                                    Autotyped?.Invoke(scannedText);
+                                    IsAutotype = false;
+                                }
+                            }
+                            else
                             {
                                 Autotyped?.Invoke(scannedText);
                                 IsAutotype = false;
@@ -218,13 +238,8 @@ namespace CodeScannerGenerator
                         }
                         else
                         {
-                            Autotyped?.Invoke(scannedText);
-                            IsAutotype = false;
+                            ShowScannedCodeInfo(results[0].BarcodeFormat, scannedText);
                         }
-                    }
-                    else
-                    {
-                        ShowScannedCodeInfo(results[0].BarcodeFormat, scannedText);
                     }
                 }
                 else
@@ -354,6 +369,19 @@ namespace CodeScannerGenerator
         private void ButtonCopy_Click(object sender, RoutedEventArgs e)
         {
             saveInClipboard(Text_Scan.Text);
+        }
+
+        private void ButtonVCard_Click(object sender, RoutedEventArgs e)
+        {
+            if (Text_Scan.Text == "VCARD")
+            {
+                VCardTemplate vcardTemplate = new VCardTemplate(LocUtil.GetCurrentCultureName(this), true);
+                vcardTemplate.Owner = Application.Current.MainWindow;
+                vcardTemplate.SetVCardText(CurrentVCard);
+                vcardTemplate.ShowDialog();
+            }
+            else
+                MessageBox.Show(LocUtil.TranslatedString("NotValidVCARDErrorMessage", this), LocUtil.TranslatedString("NotValidVCARDErrorTitle", this), MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

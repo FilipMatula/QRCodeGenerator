@@ -27,5 +27,7 @@
     <sys:String x:Key="UnexpectedErrorTitle">Unerwarteter Fehler</sys:String>
     <sys:String x:Key="DeviceNotConnectedErrorTitle">Gerät nicht verbunden</sys:String>
     <sys:String x:Key="DeviceNotConnectedErrorMessage">Gerät konnte nicht gefunden werden und ist wahrscheinlich nicht verbunden.</sys:String>
-    
+    <sys:String x:Key="NotValidVCARDErrorTitle">Ungültiges Format</sys:String>
+    <sys:String x:Key="NotValidVCARDErrorMessage">Code hat kein gültiges vcard-Format.</sys:String>
+
 </ResourceDictionary>

@@ -16,16 +16,25 @@ namespace CodeScannerGenerator
     public partial class GenerateWidget : UserControl
     {
         private System.Windows.Forms.PictureBox pictureBoxGenerate;
-        public int CodeWidth { get {
+        private string CurrentVCard { get; set; } = "";
+        public int CodeWidth
+        {
+            get
+            {
                 int result;
                 bool success = Int32.TryParse(Width_Generate.Text, out result);
                 return success ? result : 0;
-            } }
-        public int CodeHeight { get {
+            }
+        }
+        public int CodeHeight
+        {
+            get
+            {
                 int result;
                 bool success = Int32.TryParse(Height_Generate.Text, out result);
                 return success ? result : 0;
-            } }
+            }
+        }
 
         public GenerateWidget()
         {
@@ -98,12 +107,20 @@ namespace CodeScannerGenerator
         {
             HeightColumn.Visibility = (BarcodeFormat)comboBox_Generate_Type.SelectedItem == BarcodeFormat.CODE_128 ? Visibility.Visible : Visibility.Hidden;
             HeightColumnDefinition.Width = HeightColumn.Visibility == Visibility.Visible ? new GridLength(1, GridUnitType.Star) : new GridLength(0, GridUnitType.Pixel);
+
+            Button_VCard.IsEnabled = (BarcodeFormat)comboBox_Generate_Type.SelectedItem == BarcodeFormat.QR_CODE;
         }
 
         // Generate Code
         private void GenerateCode()
         {
-            if (!string.IsNullOrEmpty(Text_Generate.Text))
+            string text = Text_Generate.Text;
+            if (Text_Generate.Text != "VCARD")
+                CurrentVCard = "";
+            else
+                text = CurrentVCard;           
+            
+            if (!string.IsNullOrEmpty(text))
             {
                 BarcodeFormat format = (BarcodeFormat)comboBox_Generate_Type.SelectedItem;
                 BarcodeWriter barcodeWriter = new BarcodeWriter();
@@ -123,9 +140,9 @@ namespace CodeScannerGenerator
                     barcodeWriter.Options.Width = CodeWidth;
                     barcodeWriter.Options.Height = format == BarcodeFormat.CODE_128 ? CodeHeight : CodeWidth;
                 }
-                
+
                 barcodeWriter.Format = (BarcodeFormat)comboBox_Generate_Type.SelectedItem;
-                var result = new Bitmap(barcodeWriter.Write(Text_Generate.Text.Trim()));
+                var result = new Bitmap(barcodeWriter.Write(text.Trim()));
                 pictureBoxGenerate.Image = result;
             }
             else
@@ -188,6 +205,24 @@ namespace CodeScannerGenerator
         {
             Properties.Settings.Default.GenerateHeight = CodeHeight;
             Properties.Settings.Default.Save();
+        }
+
+        private void Button_VCardClick(object sender, RoutedEventArgs e)
+        {
+            VCardTemplate vcardTemplate = new VCardTemplate(LocUtil.GetCurrentCultureName(this));
+            if (!string.IsNullOrEmpty(CurrentVCard))
+                vcardTemplate.SetVCardText(CurrentVCard);
+            vcardTemplate.Owner = Application.Current.MainWindow;
+            bool? result = vcardTemplate.ShowDialog();
+            if (result ?? false)
+            {
+                string text = vcardTemplate.GetVCardText();
+                if (string.IsNullOrEmpty(text))
+                    return;
+                Text_Generate.Text = "VCARD";
+                CurrentVCard = text;
+                GenerateCode();
+            }
         }
     }
 }

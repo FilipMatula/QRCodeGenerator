@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
+
+    <sys:String x:Key="WindowTitle">VCard Template</sys:String>
+    <sys:String x:Key="Title">Title</sys:String>
+    <sys:String x:Key="FirstName">First name</sys:String>
+    <sys:String x:Key="LastName">Last name</sys:String>
+    <sys:String x:Key="Name">Name</sys:String>
+    <sys:String x:Key="Suffix">Suffix</sys:String>
+    <sys:String x:Key="Company">Company</sys:String>
+    <sys:String x:Key="Street">Street</sys:String>
+    <sys:String x:Key="JobTitle">Job title</sys:String>
+    <sys:String x:Key="City">City</sys:String>
+    <sys:String x:Key="ZIP">ZIP</sys:String>
+    <sys:String x:Key="Country">Country</sys:String>
+    <sys:String x:Key="Mobile">Mobile</sys:String>
+    <sys:String x:Key="Phone">Phone</sys:String>
+    <sys:String x:Key="Fax">Fax</sys:String>
+    <sys:String x:Key="Email">Email</sys:String>
+    <sys:String x:Key="Website">Website</sys:String>
+
+    <sys:String x:Key="Cancel">Cancel</sys:String>
+</ResourceDictionary>
