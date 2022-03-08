@@ -100,7 +100,7 @@ namespace CodeScannerGenerator
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.Message, "Error");
+                MessageBox.Show(e.Message, LocUtil.TranslatedString("Error", this));
             }
             return "";
         }
