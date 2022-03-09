@@ -87,6 +87,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BA50769CD4D7C4A9599ADE8D016DA734"
+        "OwnerKey" = "8:_8A2C244C8FC941479FA3FBA817A07D73"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BB5B494A21E3BF96907E48DC62672688"
         "OwnerKey" = "8:_8A2C244C8FC941479FA3FBA817A07D73"
         "MsmSig" = "8:_UNDEFINED"
@@ -131,6 +137,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BE497D1FFDAB0ED3AE945FBDDCF98589"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_BA50769CD4D7C4A9599ADE8D016DA734"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -507,6 +519,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BA50769CD4D7C4A9599ADE8D016DA734"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:MixERP.Net.VCards, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_BA50769CD4D7C4A9599ADE8D016DA734"
+                    {
+                    "Name" = "8:MixERP.Net.VCards.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:MixERP.Net.VCards.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FA7193BB783E47C1B498A8C7BA435D06"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BB5B494A21E3BF96907E48DC62672688"
             {
             "AssemblyRegister" = "3:1"
@@ -667,15 +710,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CodeScannerGenerator"
-        "ProductCode" = "8:{F70D7AFB-33CD-4F37-858D-68C1E597679C}"
-        "PackageCode" = "8:{ECD4FFAA-109D-4611-B906-DAB667D0CABC}"
+        "ProductCode" = "8:{21328639-FE9C-410D-95C3-6AA15D325737}"
+        "PackageCode" = "8:{9B14B3DC-9EEA-44EB-B6BC-01029FFCEDD7}"
         "UpgradeCode" = "8:{E2B77738-FAD3-49CD-9C8D-87770C6F2E59}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.3"
+        "ProductVersion" = "8:2.0.4"
         "Manufacturer" = "8:MTU"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1245,7 +1288,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8A2C244C8FC941479FA3FBA817A07D73"
             {
-            "SourcePath" = "8:..\\CodeScannerGenerator\\obj\\Release\\CodeScannerGenerator.exe"
+            "SourcePath" = "8:..\\CodeScannerGenerator\\obj\\Debug\\CodeScannerGenerator.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FA7193BB783E47C1B498A8C7BA435D06"
