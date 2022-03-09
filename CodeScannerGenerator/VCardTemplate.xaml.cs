@@ -44,11 +44,6 @@ namespace CodeScannerGenerator
         {
             try
             {
-                UriBuilder uriBuilder = new UriBuilder(Website.Text);
-                uriBuilder.Scheme = "https";
-                if (uriBuilder.Port == 80)
-                    uriBuilder.Port = -1;
-
                 var vcard = new VCard
                 {
                     Version = VCardVersion.V4,
@@ -93,8 +88,17 @@ namespace CodeScannerGenerator
                             EmailAddress = Email.Text
                         }
                     },
-                    Url = uriBuilder.Uri
+                    Role = JobTitle.Text
                 };
+
+                if (!string.IsNullOrEmpty(Website.Text))
+                {
+                    UriBuilder uriBuilder = new UriBuilder(Website.Text);
+                    uriBuilder.Scheme = "https";
+                    if (uriBuilder.Port == 80)
+                        uriBuilder.Port = -1;
+                    vcard.Url = uriBuilder.Uri;
+                }
 
                 return vcard.Serialize();
             }
@@ -108,14 +112,19 @@ namespace CodeScannerGenerator
         public void SetVCardText(string text)
         {
             VCard vcard = Deserializer.GetVCard(text);
-            UriBuilder uriBuilder = new UriBuilder(vcard.Url);
-            if (uriBuilder.Port == 80)
-                uriBuilder.Port = -1;
+            if (vcard.Url != null)
+            {
+                UriBuilder uriBuilder = new UriBuilder(vcard.Url);
+                if (uriBuilder.Port == 80)
+                    uriBuilder.Port = -1;
+                Website.Text = uriBuilder.Uri.ToString();
+            }
             Title.Text = vcard.Title;
             FirstName.Text = vcard.FirstName;
             LastName.Text = vcard.LastName;
             Suffix.Text = vcard.Suffix;
             Company.Text = vcard.Organization;
+            JobTitle.Text = vcard.Role;
             if (vcard.Emails != null)
                 Email.Text = string.Join("; ", vcard.Emails.Select(e => e.EmailAddress));
             if (vcard.Telephones != null)
@@ -131,7 +140,6 @@ namespace CodeScannerGenerator
                 Country.Text = vcard.Addresses.Where(t => t.Type == AddressType.Home).Select(t => t.Country).FirstOrDefault();
                 Zip.Text = vcard.Addresses.Where(t => t.Type == AddressType.Home).Select(t => t.PostalCode).FirstOrDefault();
             }
-            Website.Text = uriBuilder.Uri.ToString();
         }
     }
 }

@@ -14,7 +14,7 @@
     <sys:String x:Key="Street">Street</sys:String>
     <sys:String x:Key="JobTitle">Job title</sys:String>
     <sys:String x:Key="City">City</sys:String>
-    <sys:String x:Key="ZIP">ZIP</sys:String>
+    <sys:String x:Key="ZIP">Postal code</sys:String>
     <sys:String x:Key="Country">Country</sys:String>
     <sys:String x:Key="Mobile">Mobile</sys:String>
     <sys:String x:Key="Phone">Phone</sys:String>

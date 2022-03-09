@@ -5,23 +5,23 @@
     <sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
 
     <sys:String x:Key="WindowTitle">VCard-Vorlage</sys:String>
-    <sys:String x:Key="Title">Title</sys:String>
-    <sys:String x:Key="FirstName">First name</sys:String>
-    <sys:String x:Key="LastName">Last name</sys:String>
+    <sys:String x:Key="Title">Titel</sys:String>
+    <sys:String x:Key="FirstName">Vorname</sys:String>
+    <sys:String x:Key="LastName">Nachname</sys:String>
     <sys:String x:Key="Name">Name</sys:String>
-    <sys:String x:Key="Suffix">Suffix</sys:String>
-    <sys:String x:Key="Company">Company</sys:String>
-    <sys:String x:Key="Street">Street</sys:String>
-    <sys:String x:Key="JobTitle">Job title</sys:String>
-    <sys:String x:Key="City">City</sys:String>
-    <sys:String x:Key="ZIP">ZIP</sys:String>
-    <sys:String x:Key="Country">Country</sys:String>
-    <sys:String x:Key="Mobile">Mobile</sys:String>
-    <sys:String x:Key="Phone">Phone</sys:String>
+    <sys:String x:Key="Suffix">Namenszusatz</sys:String>
+    <sys:String x:Key="Company">Unternehmen</sys:String>
+    <sys:String x:Key="Street">Straße</sys:String>
+    <sys:String x:Key="JobTitle">Funktionstitel</sys:String>
+    <sys:String x:Key="City">Stadt</sys:String>
+    <sys:String x:Key="ZIP">Postleitzahl</sys:String>
+    <sys:String x:Key="Country">Land</sys:String>
+    <sys:String x:Key="Mobile">Mobiltelefon</sys:String>
+    <sys:String x:Key="Phone">Telefon</sys:String>
     <sys:String x:Key="Fax">Fax</sys:String>
-    <sys:String x:Key="Email">Email</sys:String>
+    <sys:String x:Key="Email">E-Mail</sys:String>
     <sys:String x:Key="Website">Website</sys:String>
 
     <sys:String x:Key="Error">Fehler</sys:String>
-    <sys:String x:Key="Cancel">Cancel</sys:String>
+    <sys:String x:Key="Cancel">Abbrechen</sys:String>
 </ResourceDictionary>
