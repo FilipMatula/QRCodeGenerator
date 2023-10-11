@@ -67,9 +67,12 @@ namespace CodeScannerGenerator.Common
                 CameraControlFlags flag;
                 captureDevice.GetCameraPropertyRange(CameraControlProperty.Focus, out minFocus, out maxFocus, out stepSize, out defaultValue, out flag);
 
-                foreach(int value in getFocusValues(minFocus, maxFocus, stepSize))
+                if (maxFocus > minFocus)
                 {
-                    captureDevice.SetCameraProperty(CameraControlProperty.Focus, value, CameraControlFlags.Manual);
+                    foreach (int value in getFocusValues(minFocus, maxFocus, stepSize))
+                    {
+                        captureDevice.SetCameraProperty(CameraControlProperty.Focus, value, CameraControlFlags.Manual);
+                    }
                 }
 
                 captureDevice.SetCameraProperty(CameraControlProperty.Focus, defaultValue, flag);
